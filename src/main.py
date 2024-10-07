@@ -6,35 +6,34 @@ from pprint import pp
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
-from .settings import Settings
-from .models.calendars import Calendar
-from .models.events import Event
+from settings import Settings
+from models.calendars import Calendar
+from models.events import Event
+from constants import DT_REQUEST_FORMAT
 
 
-
-def print_todays_events(service, calendar_id):
-    pp(
-        service.events().list(
-            calendarId=calendar_id,
+class CalendarParser:
+    def __init__(self, service, calendar_id):
+        self._service = service
+        self._calendar_id = calendar_id
+    
+    def info(self) -> Calendar:
+        data = self._service.calendars().get(calendarId=self._calendar_id).execute()
+        return Calendar.model_validate(data)
+    
+    def events(self, start: datetime, end: datetime) -> list[Event]:
+        data = self._service.events().list(
+            calendarId=self._calendar_id,
             maxResults=10,
             singleEvents=True,
             orderBy='startTime',
-            timeMin=datetime.datetime.strftime(
-                datetime.date.today(),
-                "%Y-%m-%dT%H:%M:%SZ"
-            ),
-            timeMax=datetime.datetime.strftime(
-                datetime.date.today() + datetime.timedelta(days=1),
-                "%Y-%m-%dT%H:%M:%SZ"
-            )
+            timeMin=datetime.datetime.strftime(start, DT_REQUEST_FORMAT),
+            timeMax=datetime.datetime.strftime(end, DT_REQUEST_FORMAT)
         ).execute()
-    )
-
-
-def print_calendar_info(service, callendar_id):
-    pp(
-        service.calendars().get(calendarId=callendar_id).execute()
-    )
+        return [
+            Event.model_validate(event)
+            for event in data["items"]
+        ]
 
 
 def main():
@@ -47,8 +46,13 @@ def main():
     
     service = build("calendar", "v3", credentials=credentials)
 
-    print_calendar_info(service, settings.calendar_id)
-
+    parser = CalendarParser(
+        service=service,
+        calendar_id=settings.calendar_id,
+    )
+    today = datetime.date.today()
+    tomorrow = today + datetime.timedelta(days=1)
+    pp(parser.events(today, tomorrow))
 
 if __name__ == "__main__":
     main()

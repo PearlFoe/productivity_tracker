@@ -1,0 +1,2 @@
+DT_RESPONSE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+DT_REQUEST_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
