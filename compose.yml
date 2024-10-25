@@ -1,0 +1,51 @@
+services:
+  bot:
+    hostname: bot
+    container_name: bot
+    entrypoint: ["bash", "/app/run_app.sh"]
+    build:
+      context: .
+    env_file:
+      - "secrets/.env.prod"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  db:
+    image: postgres:16.1-alpine
+    hostname: db
+    container_name: db
+    volumes:
+      - "./monitoring/grafana/:/app/monitoring/grafana/"
+      - "./monitoring/grafana/setup_grafana_db.sh:/docker-entrypoint-initdb.d/setup_grafana_db.sh"
+      - "db-data:/var/lib/postgresql/data"
+    ports:
+      - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - "secrets/.env.prod"
+
+  redis:
+    image: redis:7.2.4
+    hostname: redis
+    container_name: redis
+    ports: 
+      - 6379
+    command: ["/bin/sh", "-c", "redis-server --requirepass $${REDIS_PASSWORD} --save 60 1 --dir /data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - "secrets/.env.prod"   
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:
+  db-data:

@@ -12,6 +12,17 @@ class Settings(BaseSettings):
         extra="ignore",
         populate_by_name=True,
     )
-    
+
+    # Telegram
+    bot_api_token: str
+
+    # Google
     google_client_secrets: str
-    calendar_id: str
+
+    # Cache
+    redis_dsn: str
+    fsm_state_ttl: int = 60*60*24*30 # 1 month
+    fsm_data_ttl: int = 60*60*24*30 # 1 month
+
+    # Storage
+    db_dsn: str
