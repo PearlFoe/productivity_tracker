@@ -16,8 +16,6 @@ services:
     hostname: db
     container_name: db
     volumes:
-      - "./monitoring/grafana/:/app/monitoring/grafana/"
-      - "./monitoring/grafana/setup_grafana_db.sh:/docker-entrypoint-initdb.d/setup_grafana_db.sh"
       - "db-data:/var/lib/postgresql/data"
     ports:
       - 5432
