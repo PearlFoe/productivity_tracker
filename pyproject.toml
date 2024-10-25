@@ -1,0 +1,58 @@
+[project]
+name = "productivity-tracker"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiogram>=3.13.1",
+    "pydantic>=2.9.2",
+    "pydantic-settings>=2.6.0",
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.24.0",
+    "redis>=5.2.0",
+    "ruff>=0.7.1",
+    "dependency-injector>=4.42.0",
+]
+
+[tool.ruff]
+line-length = 110
+indent-width = 4
+output-format = "full"
+
+target-version = "py311"
+exclude = [
+    "secrets",
+    ".venv*",
+]
+src = [
+    "src",
+    "tests",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "W", "Q", "N", "UP", "ANN", "ASYNC", "COM", "DTZ", "LOG", "G", "INP", "PIE", "T20", "PT", "RET", "SIM", "R"]
+ignore = ["E999", "D212", "D107", "D203", "ANN101", "ANN204", "B008", "COM812", "ANN401"]
+unfixable = ["B"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "D104"]
+"**/{tests,docs,tools}/*" = ["E402", "D", "ANN"]
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+line-ending = "lf"  # default for Unix
+skip-magic-trailing-comma = false
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning:httpx.*",
+    "ignore::DeprecationWarning:passlib.*",
+    "ignore::DeprecationWarning:pydantic._internal.*",
+]

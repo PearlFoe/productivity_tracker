@@ -1,58 +1,39 @@
-import datetime
-import json
+import asyncio
 
-from pprint import pp
+from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums.parse_mode import ParseMode
 
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-
-from settings import Settings
-from models.calendars import Calendar
-from models.events import Event
-from constants import DT_REQUEST_FORMAT
+from src.settings import Settings
+from src.start import get_router as get_start_router
+from src.bot.containers import BotContainer
 
 
-class CalendarParser:
-    def __init__(self, service, calendar_id):
-        self._service = service
-        self._calendar_id = calendar_id
-    
-    def info(self) -> Calendar:
-        data = self._service.calendars().get(calendarId=self._calendar_id).execute()
-        return Calendar.model_validate(data)
-    
-    def events(self, start: datetime, end: datetime) -> list[Event]:
-        data = self._service.events().list(
-            calendarId=self._calendar_id,
-            maxResults=10,
-            singleEvents=True,
-            orderBy='startTime',
-            timeMin=datetime.datetime.strftime(start, DT_REQUEST_FORMAT),
-            timeMax=datetime.datetime.strftime(end, DT_REQUEST_FORMAT)
-        ).execute()
-        return [
-            Event.model_validate(event)
-            for event in data["items"]
-        ]
+def _include_routers(dp: Dispatcher, settings: Settings) -> None:
+    routers_getters = (
+        get_start_router,
+    )
+
+    for getter in routers_getters:
+        router = getter(settings)
+        dp.include_router(router)
 
 
-def main():
+async def main() -> None:
     settings = Settings()
-    
-    account_info = json.loads(settings.google_client_secrets)
-    credentials = service_account.Credentials.from_service_account_info(account_info).with_scopes(
-        ['https://www.googleapis.com/auth/calendar'],
-    )
-    
-    service = build("calendar", "v3", credentials=credentials)
+    container = BotContainer()
+    container.env.from_dict(settings.model_dump())
+    await container.init_resources()
 
-    parser = CalendarParser(
-        service=service,
-        calendar_id=settings.calendar_id,
-    )
-    today = datetime.date.today()
-    tomorrow = today + datetime.timedelta(days=1)
-    pp(parser.events(today, tomorrow))
+    bot = Bot(token=settings.bot_api_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    dp = Dispatcher(storage=await container.redis_storage())
+
+    _include_routers(dp, settings)
+
+    try:
+        await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
+    finally:
+        await container.shutdown_resources()
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
