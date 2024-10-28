@@ -26,6 +26,7 @@ target-version = "py311"
 exclude = [
     "secrets",
     ".venv*",
+    "migrations",
 ]
 src = [
     "src",
