@@ -1,4 +1,4 @@
--- name: get_user^
+-- name: get_user_id^
 SELECT id
 FROM pt.user AS u
 WHERE u.telegram_id = :tg_id;
