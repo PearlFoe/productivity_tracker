@@ -13,6 +13,8 @@ dependencies = [
     "redis>=5.2.0",
     "ruff>=0.7.1",
     "dependency-injector>=4.42.0",
+    "alembic>=1.13.3",
+    "aiosql>=12.2",
 ]
 
 [tool.ruff]
