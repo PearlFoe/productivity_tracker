@@ -20,7 +20,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.create_table('user',
-        sa.Column('id', sa.UUID(), nullable=False),
+        sa.Column('id', sa.UUID(), server_default=sa.text('gen_random_uuid()'), nullable=False),
         sa.Column('telegram_id', sa.Integer(), nullable=True),
         sa.Column('timezone', sa.Text, nullable=True),
         sa.Column(
