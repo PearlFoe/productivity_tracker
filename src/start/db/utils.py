@@ -21,4 +21,4 @@ async def load_queries(
 
 async def init_db_connection_pool(dsn: networks.PostgresDsn) -> AsyncIterator[Connection]:
     async with create_pool(dsn=str(dsn)) as pool:
-        yield await pool.acquire()
+        yield pool

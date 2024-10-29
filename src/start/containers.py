@@ -21,13 +21,14 @@ class StartContainer(containers.DeclarativeContainer):
         UserQueryBuilder
     )
 
+    _user_qb_path = providers.Callable(path.join, env.project_dir, "src/start/db/queries/sql/user.sql")
     user_qb = providers.Callable(
         load_queries,
         builder=user_unloaded_qb,
-        path=path.join(env.project_dir, "src/start/db/queries/sql/user.sql"),
+        path=_user_qb_path,
     )
 
-    pool = providers.Singleton(
+    pool = providers.Resource(
         init_db_connection_pool,
         dsn=env.db_dsn,
     )

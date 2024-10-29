@@ -11,7 +11,12 @@ from src.settings import Settings
 env = Settings()
 config = context.config
 
-config.set_main_option("sqlalchemy.url", str(env.db_dsn))
+def _add_driver(dsn: str, driver: str = "asyncpg") -> str:
+    divider = "://"
+    protocol, args = dsn.split(divider)
+    return divider.join([f"{protocol}+{driver}", args])
+
+config.set_main_option("sqlalchemy.url", _add_driver(str(env.db_dsn)))
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
