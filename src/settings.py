@@ -21,8 +21,8 @@ class Settings(BaseSettings):
 
     # Cache
     redis_dsn: str
-    fsm_state_ttl: int = 60*60*24*30 # 1 month
-    fsm_data_ttl: int = 60*60*24*30 # 1 month
+    fsm_state_ttl: int = 60 * 60 * 24 * 30  # 1 month
+    fsm_data_ttl: int = 60 * 60 * 24 * 30  # 1 month
 
     # Storage
     db_dsn: str

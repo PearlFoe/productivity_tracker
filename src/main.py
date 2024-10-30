@@ -11,15 +11,15 @@ from src.bot.commands import COMMANDS
 
 
 async def _include_routers(dp: Dispatcher, settings: Settings) -> None:
-    routers_getters = (
-        get_start_router,
-    )
+    routers_getters = (get_start_router,)
 
     for getter in routers_getters:
         router = await getter(settings)
         dp.include_router(router)
 
+
 # Add containers resources startup and shutdown
+
 
 async def main() -> None:
     settings = Settings()
@@ -38,6 +38,7 @@ async def main() -> None:
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     finally:
         await container.shutdown_resources()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

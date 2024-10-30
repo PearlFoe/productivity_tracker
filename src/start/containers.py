@@ -17,9 +17,7 @@ class StartContainer(containers.DeclarativeContainer):
 
     env = providers.Configuration()
 
-    user_unloaded_qb = providers.Singleton(
-        UserQueryBuilder
-    )
+    user_unloaded_qb = providers.Singleton(UserQueryBuilder)
 
     _user_qb_path = providers.Callable(path.join, env.project_dir, "src/start/db/queries/sql/user.sql")
     user_qb = providers.Callable(
