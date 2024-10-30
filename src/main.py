@@ -18,6 +18,7 @@ async def _include_routers(dp: Dispatcher, settings: Settings) -> None:
         router = await getter(settings)
         dp.include_router(router)
 
+# Add containers resources startup and shutdown
 
 async def main() -> None:
     settings = Settings()

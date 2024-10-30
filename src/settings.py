@@ -8,7 +8,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(
         env_file_encoding="utf-8",
-        env_file=path.join(project_dir, "secrets/.env"),
+        env_file=path.join(project_dir, "secrets/.env.prod"),
         extra="ignore",
         populate_by_name=True,
     )
