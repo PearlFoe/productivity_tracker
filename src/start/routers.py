@@ -22,5 +22,6 @@ async def start(
     if not await user_service.user_exists(message.from_user):
         await user_service.create_new_user(message.from_user)
 
-    await message.answer(text=StartMessages.START)
+    text = StartMessages.START + "\n\n" + StartMessages.NEW_CALLENDAR
+    await message.answer(text=text)
     await state.set_state(StartState.START)
