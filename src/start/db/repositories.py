@@ -26,4 +26,3 @@ class UserRepository:
                 )
             except asyncpg.exceptions.UniqueViolationError as e:
                 raise UserAlreadyExistsError(tg_id=tg_id) from e
-

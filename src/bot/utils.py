@@ -13,4 +13,3 @@ async def redis_session(pool: ConnectionPool) -> AsyncIterator[Redis]:
     session = Redis.from_pool(pool)
     yield session
     await session.close()
-

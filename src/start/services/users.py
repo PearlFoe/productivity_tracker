@@ -7,10 +7,7 @@ from ..errors import UserAlreadyExistsError
 
 
 class UserService:
-    def __init__(
-        self,
-        user_repository: UserRepository
-    ) -> None:
+    def __init__(self, user_repository: UserRepository) -> None:
         self._user = user_repository
 
     async def user_exists(self, user: User) -> bool:

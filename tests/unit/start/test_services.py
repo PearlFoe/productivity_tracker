@@ -2,6 +2,7 @@ from aiogram.types import User
 
 from src.start.services.users import UserService
 
+
 class TestUserService:
     async def test_check_user_exists__no_user(self, user_service: UserService, user: User):
         exists = await user_service.user_exists(user)

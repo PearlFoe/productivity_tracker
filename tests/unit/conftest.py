@@ -12,6 +12,7 @@ from .mocks.start.repositories import UserRepositoryMock
 def settings():
     return Settings()
 
+
 @pytest.fixture
 async def start_container(settings: Settings):
     container = StartContainer()
@@ -21,9 +22,11 @@ async def start_container(settings: Settings):
 
     return container
 
+
 @pytest.fixture
 def user_service(start_container: StartContainer) -> UserService:
     return start_container.user_service()
+
 
 @pytest.fixture
 def user() -> User:

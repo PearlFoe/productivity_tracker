@@ -6,14 +6,11 @@ from pydantic import networks
 
 
 class _LoadableQueryBuilder(Protocol):
-    async def load_queries(self, path: str, driver: str) -> None:
-        ...
+    async def load_queries(self, path: str, driver: str) -> None: ...
 
 
 async def load_queries(
-    builder: _LoadableQueryBuilder,
-    path: str = "sql/",
-    driver: str = "asyncpg"
+    builder: _LoadableQueryBuilder, path: str = "sql/", driver: str = "asyncpg"
 ) -> _LoadableQueryBuilder:
     await builder.load_queries(path, driver)
     return builder

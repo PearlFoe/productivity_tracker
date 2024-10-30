@@ -2,7 +2,7 @@ from src.start.errors import UserAlreadyExistsError
 
 
 class UserRepositoryMock:
-    def __init__(self, pool = None, queries = None):
+    def __init__(self, pool=None, queries=None):
         self._db = {}
 
     async def check_user_exists(self, tg_id: int) -> bool:
@@ -13,4 +13,3 @@ class UserRepositoryMock:
             raise UserAlreadyExistsError(tg_id=tg_id)
 
         self._db[tg_id] = tg_id
-
