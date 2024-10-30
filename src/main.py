@@ -7,17 +7,19 @@ from aiogram.enums.parse_mode import ParseMode
 from src.settings import Settings
 from src.start import get_router as get_start_router
 from src.bot.containers import BotContainer
+from src.bot.commands import COMMANDS
 
 
-def _include_routers(dp: Dispatcher, settings: Settings) -> None:
+async def _include_routers(dp: Dispatcher, settings: Settings) -> None:
     routers_getters = (
         get_start_router,
     )
 
     for getter in routers_getters:
-        router = getter(settings)
+        router = await getter(settings)
         dp.include_router(router)
 
+# Add containers resources startup and shutdown
 
 async def main() -> None:
     settings = Settings()
@@ -28,7 +30,9 @@ async def main() -> None:
     bot = Bot(token=settings.bot_api_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher(storage=await container.redis_storage())
 
-    _include_routers(dp, settings)
+    await bot.set_my_commands(COMMANDS)
+
+    await _include_routers(dp, settings)
 
     try:
         await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())

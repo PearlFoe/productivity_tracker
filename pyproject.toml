@@ -13,6 +13,9 @@ dependencies = [
     "redis>=5.2.0",
     "ruff>=0.7.1",
     "dependency-injector>=4.42.0",
+    "alembic>=1.13.3",
+    "aiosql>=12.2",
+    "asyncpg>=0.30.0",
 ]
 
 [tool.ruff]
@@ -24,6 +27,7 @@ target-version = "py311"
 exclude = [
     "secrets",
     ".venv*",
+    "migrations",
 ]
 src = [
     "src",
