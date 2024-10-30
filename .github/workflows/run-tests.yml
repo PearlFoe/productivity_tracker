@@ -36,4 +36,4 @@ jobs:
         printf '%s\n' "${{ vars.ENV_FILE_CONTENT }}" > secrets/.env.prod
     - name: Unit tests
       run: |
-        uv pytest tests/unit/
+        python -m uv run pytest tests/unit/
