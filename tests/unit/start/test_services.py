@@ -1,9 +1,6 @@
-import pytest
-
 from aiogram.types import User
 
 from src.start.services.users import UserService
-from src.start.errors import UserAlreadyExistsError
 
 class TestUserService:
     async def test_check_user_exists__no_user(self, user_service: UserService, user: User):
