@@ -7,6 +7,7 @@ from aiogram.enums.parse_mode import ParseMode
 from src.settings import Settings
 from src.start import get_router as get_start_router
 from src.bot.containers import BotContainer
+from src.bot.commands import COMMANDS
 
 
 async def _include_routers(dp: Dispatcher, settings: Settings) -> None:
@@ -28,6 +29,8 @@ async def main() -> None:
 
     bot = Bot(token=settings.bot_api_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher(storage=await container.redis_storage())
+
+    await bot.set_my_commands(COMMANDS)
 
     await _include_routers(dp, settings)
 
