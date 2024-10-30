@@ -1,6 +1,7 @@
 import asyncpg
 
 from .queries.builders import UserQueryBuilder
+from ..errors import UserAlreadyExistsError
 
 
 class UserRepository:
@@ -18,8 +19,11 @@ class UserRepository:
 
     async def create_user(self, tg_id: int) -> None:
         async with self._pool.acquire() as connection:
-            await self._queries.create_user(
-                connection=connection,
-                tg_id=tg_id,
-            )
+            try:
+                await self._queries.create_user(
+                    connection=connection,
+                    tg_id=tg_id,
+                )
+            except asyncpg.exceptions.UniqueViolationError as e:
+                raise UserAlreadyExistsError(tg_id=tg_id) from e
 

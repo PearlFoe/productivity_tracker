@@ -1,6 +1,9 @@
+import contextlib
+
 from aiogram.types.user import User
 
 from ..db.repositories import UserRepository
+from ..errors import UserAlreadyExistsError
 
 
 class UserService:
@@ -14,4 +17,5 @@ class UserService:
         return await self._user.check_user_exists(user.id)
 
     async def create_new_user(self, user: User) -> None:
-        await self._user.create_user(user.id)
+        with contextlib.suppress(UserAlreadyExistsError):
+            await self._user.create_user(user.id)

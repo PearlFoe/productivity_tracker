@@ -37,6 +37,7 @@ def upgrade() -> None:
             nullable=False
         ),
         sa.PrimaryKeyConstraint('id', name=op.f('pk_user')),
+        sa.UniqueConstraint('telegram_id', name=op.f('uq_user_telegram_id')),
         schema='pt'
     )
 
