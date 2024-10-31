@@ -9,7 +9,7 @@ from .keyboards import CalendarKeyboard
 router = Router()
 
 
-@router.message(Command("/calendar"))
+@router.message(Command("calendar"))
 async def calendar_command(message: types.Message, state: FSMContext) -> None:
     await message.answer(text=CalendarMessages.REQUEST_LINK)
     await state.set_state(CalendarState.LINK)
@@ -18,7 +18,7 @@ async def calendar_command(message: types.Message, state: FSMContext) -> None:
 @router.message(CalendarState.LINK)
 async def calendar_link_processing(message: types.Message, state: FSMContext) -> None:
     # TODO: validate url
-    await message.answer(text=CalendarMessages.CHOOSE_CATEGORY, reply_markup=CalendarKeyboard.category_kb)
+    await message.answer(text=CalendarMessages.CHOOSE_CATEGORY, reply_markup=CalendarKeyboard.category_kb())
     await state.set_state(CalendarState.CATEGORY)  # pass somehow calendar id with the state
 
 
