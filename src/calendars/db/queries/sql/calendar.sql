@@ -1,4 +1,4 @@
--- name: create_calendar!
+-- name: add_calendar^
 INSERT INTO pt.calendar (user_id, name, description, timezone)
 VALUES (
     (
