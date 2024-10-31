@@ -8,7 +8,7 @@ from .containers import CalendarContainer
 async def _get_container(settings: Settings) -> CalendarContainer:
     container = CalendarContainer()
     container.env.from_dict(settings.model_dump())
-    await container.init_resources()
+    # await container.init_resources()
     return container
 
 
