@@ -13,12 +13,11 @@ VALUES (
 RETURNING pt.calendar.id;
 
 -- name: update_calendar_category!
-UPDATE pt.calendar (category)
-VALUES (
-    (
+UPDATE pt.calendar
+SET 
+    category=(
         SELECT с.id 
         FROM pt.calendar_category as с
         WHERE c.name = :category
     )
-)
-WHERE pt.calendar.id = :calendar_id;
+WHERE calendar.id = :calendar_id;
