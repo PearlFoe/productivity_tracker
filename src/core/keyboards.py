@@ -8,10 +8,10 @@ from .buttons.base import ButtonGroup, Button
 
 class BaseKeyboard:
     @staticmethod
-    def _add_row(
+    def __add_row(
         builder: KeyboardBuilder,
         button_type: type[ButtonType],
-        row: tuple[Button] | Button
+        row: tuple[Button] | Button,
     ) -> None:
         if isinstance(row, tuple):
             builder.row(
@@ -19,8 +19,8 @@ class BaseKeyboard:
                     button_type(
                         text=button.text,
                         callback_data=button.callback_data.pack()
-                            if isinstance(button.callback_data, CallbackData)
-                            else button.callback_data
+                        if isinstance(button.callback_data, CallbackData)
+                        else button.callback_data,
                     )
                     for button in row
                 ]
@@ -30,18 +30,18 @@ class BaseKeyboard:
                 button_type(
                     text=row.text,
                     callback_data=row.callback_data.pack()
-                        if isinstance(row.callback_data, CallbackData)
-                        else row.callback_data
-                    )
+                    if isinstance(row.callback_data, CallbackData)
+                    else row.callback_data,
+                )
             )
 
     @classmethod
-    def add_buttons(
+    def _add_buttons(
         cls: type["BaseKeyboard"],
         builder: KeyboardBuilder,
         buttons: type[ButtonGroup] | Iterable[Button],
-        button_type: type[ButtonType]
+        button_type: type[ButtonType],
     ) -> None:
         rows = buttons if isinstance(buttons, Iterable) else buttons.rows
         for row in rows:
-            cls._add_row(builder, button_type, row)
+            cls.__add_row(builder, button_type, row)

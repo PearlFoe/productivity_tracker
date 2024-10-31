@@ -22,7 +22,7 @@ async def _include_routers(dp: Dispatcher, settings: Settings) -> None:
         dp.include_router(router)
 
 
-# Add containers resources startup and shutdown
+# TODO: Add containers resources startup and shutdown
 
 
 async def main() -> None:
