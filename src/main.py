@@ -5,13 +5,17 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums.parse_mode import ParseMode
 
 from src.settings import Settings
-from src.start import get_router as get_start_router
 from src.bot.containers import BotContainer
 from src.bot.commands import COMMANDS
+from src.start import get_router as get_start_router
+from src.calendars import get_router as get_calendar_router
 
 
 async def _include_routers(dp: Dispatcher, settings: Settings) -> None:
-    routers_getters = (get_start_router,)
+    routers_getters = (
+        get_start_router,
+        get_calendar_router,
+    )
 
     for getter in routers_getters:
         router = await getter(settings)
