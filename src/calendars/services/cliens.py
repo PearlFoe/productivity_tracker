@@ -1,11 +1,13 @@
+import json
+
 from aiogoogle import Aiogoogle
 from aiogoogle.auth.creds import ServiceAccountCreds
 
 from ..models.calendars import Calendar
-from ..models.calendar_client.calendars import Calendar as APIData
+from ..models.clients.calendars import Calendar as APIData
 
 
-class CalendarAPIClient:
+class GoogleCalendarAPIClient:
     def __init__(
         self, service_account_creds: dict, api_name: str = "calendar", api_version: str = "v3"
     ) -> None:
@@ -16,7 +18,7 @@ class CalendarAPIClient:
     def _parse_creds(self, raw_creds: dict) -> ServiceAccountCreds:
         return ServiceAccountCreds(
             scopes=["https://www.googleapis.com/auth/calendar"],
-            **raw_creds,
+            **json.loads(raw_creds),
         )
 
     async def _request_calendar_info(self, calendar_id: str) -> APIData:
@@ -24,7 +26,7 @@ class CalendarAPIClient:
         async with Aiogoogle(service_account_creds=creds) as aiogoogle:
             api = await aiogoogle.discover(self._api_name, self._api_version)
             calendar = await aiogoogle.as_service_account(
-                api.calendars.get(calendar_id=calendar_id),
+                api.calendars.get(calendarId=calendar_id),
             )
 
         return APIData.model_validate(calendar)
@@ -35,5 +37,4 @@ class CalendarAPIClient:
             google_id=api_data.id,
             name=api_data.summary,
             timezone=api_data.timezone,
-            primary=api_data.primary,
         )

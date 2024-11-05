@@ -36,6 +36,7 @@ def upgrade() -> None:
             onupdate=sa.text("timezone('UTC', now())"),
             nullable=False
         ),
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_calendar_category')),
         schema='pt',
     )
     
@@ -60,6 +61,7 @@ def upgrade() -> None:
             onupdate=sa.text("timezone('UTC', now())"),
             nullable=False
         ),
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_calendar')),
         sa.ForeignKeyConstraint(["category"], ["pt.calendar_category.id"], name="fk_calendar_category_calendar_category"),
         schema='pt',
     )

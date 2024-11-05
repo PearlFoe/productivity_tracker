@@ -1,16 +1,16 @@
--- name: add_calendar^
+-- name: add_calendar<!
 INSERT INTO pt.calendar (user_id, name, description, timezone)
 VALUES (
     (
         SELECT u.id 
         FROM pt.user as u
-        WHERE u.tg_id = :tg_id
+        WHERE u.telegram_id = :tg_id
     ),
     :name,
     :description,
     :timezone
 )
-RETURNING pt.calendar.id;
+RETURNING id;
 
 -- name: update_calendar_category!
 UPDATE pt.calendar

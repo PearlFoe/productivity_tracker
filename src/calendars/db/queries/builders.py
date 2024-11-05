@@ -15,14 +15,13 @@ class CalendarQueryBuilder:
     async def add_calendar(
         self, connection: Connection, tg_id: int, name: str, timezone: str, description: str = None
     ) -> UUID:
-        id_ = await self._queries.add_calendar(
+        return await self._queries.add_calendar(
             connection,
             tg_id=tg_id,
             name=name,
             description=description,
             timezone=timezone,
         )
-        return UUID(id_)
 
     async def update_calendar_category(
         self, connection: Connection, calendar_id: UUID, category: str
