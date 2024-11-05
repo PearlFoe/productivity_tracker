@@ -2,9 +2,11 @@ import json
 
 from aiogoogle import Aiogoogle
 from aiogoogle.auth.creds import ServiceAccountCreds
+from aiogoogle.excs import HTTPError
 
 from ..models.calendars import Calendar
 from ..models.clients.calendars import Calendar as APIData
+from ..errors import InvalidCalendarIDError
 
 
 class GoogleCalendarAPIClient:
@@ -25,9 +27,14 @@ class GoogleCalendarAPIClient:
         creds = self._parse_creds(self._raw_creds)
         async with Aiogoogle(service_account_creds=creds) as aiogoogle:
             api = await aiogoogle.discover(self._api_name, self._api_version)
-            calendar = await aiogoogle.as_service_account(
-                api.calendars.get(calendarId=calendar_id),
-            )
+            try:
+                calendar = await aiogoogle.as_service_account(
+                    api.calendars.get(calendarId=calendar_id),
+                )
+            except HTTPError as e:
+                if e.res.status_code == 404:
+                    raise InvalidCalendarIDError(calendar_id=calendar_id) from e
+                raise e
 
         return APIData.model_validate(calendar)
 

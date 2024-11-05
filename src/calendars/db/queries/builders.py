@@ -13,11 +13,18 @@ class CalendarQueryBuilder:
         self._queries = aiosql.from_path(path, driver)
 
     async def add_calendar(
-        self, connection: Connection, tg_id: int, name: str, timezone: str, description: str = None
+        self,
+        connection: Connection,
+        tg_id: int,
+        google_id: str,
+        name: str,
+        timezone: str,
+        description: str = None,
     ) -> UUID:
         return await self._queries.add_calendar(
             connection,
             tg_id=tg_id,
+            google_id=google_id,
             name=name,
             description=description,
             timezone=timezone,

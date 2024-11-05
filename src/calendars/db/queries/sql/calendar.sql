@@ -1,11 +1,12 @@
 -- name: add_calendar<!
-INSERT INTO pt.calendar (user_id, name, description, timezone)
+INSERT INTO pt.calendar (user_id, google_id, name, description, timezone)
 VALUES (
     (
         SELECT u.id 
         FROM pt.user u
         WHERE u.telegram_id = :tg_id
     ),
+    :google_id,
     :name,
     :description,
     :timezone

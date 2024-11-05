@@ -8,7 +8,7 @@ from .mocks.repositories import UserRepositoryMock
 
 
 @pytest.fixture
-async def start_container(settings: Settings):
+async def start_container(settings: Settings) -> StartContainer:
     container = StartContainer()
     container.env.from_dict(settings.model_dump())
 

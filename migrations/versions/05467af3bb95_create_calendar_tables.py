@@ -44,6 +44,7 @@ def upgrade() -> None:
         'calendar',
         sa.Column('id', sa.UUID(), server_default=sa.text('gen_random_uuid()'), nullable=False),
         sa.Column('user_id', sa.UUID(), nullable=False),
+        sa.Column('google_id', sa.Text(), nullable=False),
         sa.Column('name', sa.Text, nullable=False),
         sa.Column('category', sa.UUID, nullable=True),
         sa.Column('description', sa.Text, nullable=True),
@@ -62,6 +63,7 @@ def upgrade() -> None:
             nullable=False
         ),
         sa.PrimaryKeyConstraint('id', name=op.f('pk_calendar')),
+        sa.UniqueConstraint('user_id', 'google_id', name=op.f('uq_calendar_user_id_telegram_id')),
         sa.ForeignKeyConstraint(["category"], ["pt.calendar_category.id"], name="fk_calendar_category_calendar_category"),
         schema='pt',
     )

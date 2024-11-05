@@ -60,4 +60,5 @@ filterwarnings = [
     "ignore::DeprecationWarning:httpx.*",
     "ignore::DeprecationWarning:passlib.*",
     "ignore::DeprecationWarning:pydantic._internal.*",
+    "ignore:Inheritance class AiohttpSession from ClientSession is discouraged:DeprecationWarning",
 ]

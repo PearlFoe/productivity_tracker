@@ -19,4 +19,4 @@ class CalendarService:
         return await self._calendar.add_calendar(user_tg_id, calendar)
 
     async def update_calendar_category(self, calendar_id: UUID, calendar_category: CalendarCategory) -> None:
-        await self._calendar.update_calendar_caltegory(calendar_id, calendar_category)
+        await self._calendar.update_calendar_category(calendar_id, calendar_category)
