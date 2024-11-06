@@ -16,6 +16,7 @@ dependencies = [
     "alembic>=1.13.3",
     "aiosql>=12.2",
     "asyncpg>=0.30.0",
+    "aiogoogle>=5.13.2",
 ]
 
 [tool.ruff]
@@ -59,4 +60,5 @@ filterwarnings = [
     "ignore::DeprecationWarning:httpx.*",
     "ignore::DeprecationWarning:passlib.*",
     "ignore::DeprecationWarning:pydantic._internal.*",
+    "ignore:Inheritance class AiohttpSession from ClientSession is discouraged:DeprecationWarning",
 ]
