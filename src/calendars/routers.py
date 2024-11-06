@@ -10,6 +10,8 @@ from .constants.messages import CalendarMessages
 from .keyboards import CalendarKeyboard
 from .containers import CalendarContainer
 from .services.calendars import CalendarService
+from .errors import CalendarDuplicateError, InvalidCalendarIDError
+
 
 router = Router()
 
@@ -27,7 +29,17 @@ async def calendar_link_processing(
     state: FSMContext,
     calendar_service: CalendarService = Provide[CalendarContainer.calendar_service],
 ) -> None:
-    calendar_id = await calendar_service.add_calendar(message.from_user.id, message.text)
+    try:
+        calendar_id = await calendar_service.add_calendar(message.from_user.id, message.text)
+    except InvalidCalendarIDError:
+        await message.answer(text=CalendarMessages.INVALID_CALENDAR_LINK)
+        await state.clear()
+        return
+    except CalendarDuplicateError:
+        await message.answer(text=CalendarMessages.CALENDAR_DUPLICATE)
+        await state.clear()
+        return
+
     await message.answer(text=CalendarMessages.CHOOSE_CATEGORY, reply_markup=CalendarKeyboard.category_kb())
     await state.set_state(CalendarState.CATEGORY)
     await state.set_data(str(calendar_id))
