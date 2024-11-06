@@ -5,6 +5,7 @@ from aiogram.types.user import User
 from src.calendars.services.calendars import CalendarService
 from src.calendars.models.calendars import Calendar
 from src.calendars.errors import CalendarDuplicateError, InvalidCalendarIDError
+from src.calendars.constants.calendar_category import CalendarCategory
 
 
 class TestCalendarService:
@@ -43,3 +44,20 @@ class TestCalendarService:
     ):
         with pytest.raises(InvalidCalendarIDError):
             await calendar_service.add_calendar(user.id, calendar.google_id)
+
+    async def test_update_calendar_category(
+        self,
+        calendar_service: CalendarService,
+        user: User,
+        calendar: Calendar,
+    ):
+        calendar_service._client._db[calendar.google_id] = calendar
+        category = CalendarCategory.WORK
+
+        calendar_id = await calendar_service.add_calendar(user.id, calendar.google_id)
+        await calendar_service.update_calendar_category(
+            calendar_id=calendar_id,
+            calendar_category=category,
+        )
+
+        assert calendar_service._calendar._db[calendar_id].category == category
