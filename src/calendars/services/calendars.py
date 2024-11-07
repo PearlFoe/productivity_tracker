@@ -1,8 +1,8 @@
 from uuid import UUID
 
-from .cliens import GoogleCalendarAPIClient
 from ..constants.calendar_category import CalendarCategory
 from ..db.repositories import CalendarRepository
+from .cliens import GoogleCalendarAPIClient
 
 
 class CalendarService:

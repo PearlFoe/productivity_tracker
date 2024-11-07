@@ -1,7 +1,7 @@
 from typing import ClassVar
 
-from pydantic import BaseModel, ConfigDict
 from aiogram.filters.callback_data import CallbackData
+from pydantic import BaseModel, ConfigDict
 
 
 class Button(BaseModel):

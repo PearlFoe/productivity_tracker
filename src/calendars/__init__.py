@@ -1,8 +1,9 @@
 from aiogram import Router
 
 from src.settings import Settings
-from .routers import router
+
 from .containers import CalendarContainer
+from .routers import router
 
 
 async def _get_container(settings: Settings) -> CalendarContainer:

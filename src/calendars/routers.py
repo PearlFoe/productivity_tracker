@@ -3,15 +3,14 @@ from uuid import UUID
 from aiogram import Router, types
 from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
-from dependency_injector.wiring import inject, Provide
+from dependency_injector.wiring import Provide, inject
 
-from .fsm import CalendarState
 from .constants.messages import CalendarMessages
-from .keyboards import CalendarKeyboard
 from .containers import CalendarContainer
-from .services.calendars import CalendarService
 from .errors import CalendarDuplicateError, InvalidCalendarIDError
-
+from .fsm import CalendarState
+from .keyboards import CalendarKeyboard
+from .services.calendars import CalendarService
 
 router = Router()
 

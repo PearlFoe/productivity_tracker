@@ -1,13 +1,12 @@
 from aiogram import Router, types
 from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
-from dependency_injector.wiring import inject, Provide
+from dependency_injector.wiring import Provide, inject
 
-from .fsm import StartState
 from .constants.messages import StartMessages
 from .containers import StartContainer
+from .fsm import StartState
 from .services.users import UserService
-
 
 router = Router()
 
