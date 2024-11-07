@@ -1,6 +1,6 @@
 from typing import ClassVar
 
-from src.core.buttons.base import Button, ButtonGroup
+from bot.core.buttons.base import Button, ButtonGroup
 
 
 class CategoryButtons(ButtonGroup):

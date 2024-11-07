@@ -1,6 +1,6 @@
 from aiogram import Router
 
-from src.settings import Settings
+from bot.settings import Settings
 
 from .containers import CalendarContainer
 from .routers import router

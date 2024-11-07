@@ -6,7 +6,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-from src.settings import Settings
+from bot.settings import Settings
 
 env = Settings()
 config = context.config

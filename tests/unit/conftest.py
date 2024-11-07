@@ -1,7 +1,7 @@
 import pytest
 from aiogram.types import User
 
-from src.settings import Settings
+from bot.settings import Settings
 
 
 @pytest.fixture

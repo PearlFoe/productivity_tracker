@@ -1,6 +1,6 @@
 from aiogram.types import User
 
-from src.start.services.users import UserService
+from bot.start.services.users import UserService
 
 
 class TestUserService:

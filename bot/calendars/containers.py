@@ -2,7 +2,7 @@ from os import path
 
 from dependency_injector import containers, providers
 
-from src.core.db.utils import init_db_connection_pool, load_queries
+from bot.core.db.utils import init_db_connection_pool, load_queries
 
 from .db.queries.builders import CalendarQueryBuilder
 from .db.repositories import CalendarRepository
@@ -13,7 +13,7 @@ from .services.cliens import GoogleCalendarAPIClient
 class CalendarContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
-            "src.calendars.routers",
+            "bot.calendars.routers",
         ],
     )
 

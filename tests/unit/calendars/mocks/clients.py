@@ -1,5 +1,5 @@
-from src.calendars.errors import InvalidCalendarIDError
-from src.calendars.models.calendars import Calendar
+from bot.calendars.errors import InvalidCalendarIDError
+from bot.calendars.models.calendars import Calendar
 
 
 class GoogleCalendarAPIClientMock:

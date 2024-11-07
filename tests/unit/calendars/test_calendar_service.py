@@ -1,10 +1,10 @@
 import pytest
 from aiogram.types.user import User
 
-from src.calendars.constants.calendar_category import CalendarCategory
-from src.calendars.errors import CalendarDuplicateError, InvalidCalendarIDError
-from src.calendars.models.calendars import Calendar
-from src.calendars.services.calendars import CalendarService
+from bot.calendars.constants.calendar_category import CalendarCategory
+from bot.calendars.errors import CalendarDuplicateError, InvalidCalendarIDError
+from bot.calendars.models.calendars import Calendar
+from bot.calendars.services.calendars import CalendarService
 
 
 class TestCalendarService:
