@@ -1,12 +1,13 @@
 from os import path
 
-from dependency_injector import providers, containers
+from dependency_injector import containers, providers
 
-from src.core.db.utils import load_queries, init_db_connection_pool
-from .services.cliens import GoogleCalendarAPIClient
-from .services.calendars import CalendarService
+from src.core.db.utils import init_db_connection_pool, load_queries
+
 from .db.queries.builders import CalendarQueryBuilder
 from .db.repositories import CalendarRepository
+from .services.calendars import CalendarService
+from .services.cliens import GoogleCalendarAPIClient
 
 
 class CalendarContainer(containers.DeclarativeContainer):

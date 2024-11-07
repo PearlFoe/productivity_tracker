@@ -1,9 +1,9 @@
 from collections.abc import Iterable
 
-from aiogram.utils.keyboard import KeyboardBuilder, ButtonType
 from aiogram.filters.callback_data import CallbackData
+from aiogram.utils.keyboard import ButtonType, KeyboardBuilder
 
-from .buttons.base import ButtonGroup, Button
+from .buttons.base import Button, ButtonGroup
 
 
 class BaseKeyboard:

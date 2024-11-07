@@ -1,8 +1,8 @@
 from uuid import UUID, uuid4
 
-from src.calendars.models.calendars import Calendar
 from src.calendars.constants.calendar_category import CalendarCategory
 from src.calendars.errors import CalendarDuplicateError
+from src.calendars.models.calendars import Calendar
 
 
 class CalendarRepoositoryMock:

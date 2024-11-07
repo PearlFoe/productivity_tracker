@@ -1,7 +1,7 @@
 import asyncpg
 
-from .queries.builders import UserQueryBuilder
 from ..errors import UserAlreadyExistsError
+from .queries.builders import UserQueryBuilder
 
 
 class UserRepository:

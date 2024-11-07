@@ -1,5 +1,5 @@
-from dependency_injector import containers, providers
 from aiogram.fsm.storage.redis import RedisStorage
+from dependency_injector import containers, providers
 
 from .utils import redis_pool, redis_session
 

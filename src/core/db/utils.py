@@ -1,7 +1,7 @@
-from typing import Protocol
 from collections.abc import AsyncIterator
+from typing import Protocol
 
-from asyncpg import create_pool, Connection
+from asyncpg import Connection, create_pool
 from pydantic import networks
 
 

@@ -1,9 +1,10 @@
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from .constants import buttons
-from src.core.keyboards import BaseKeyboard
 from src.core.buttons.base import ButtonGroup
+from src.core.keyboards import BaseKeyboard
+
+from .constants import buttons
 
 
 class CalendarKeyboard(BaseKeyboard):

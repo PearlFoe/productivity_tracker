@@ -2,10 +2,10 @@ from uuid import UUID
 
 import asyncpg
 
-from .queries.builders import CalendarQueryBuilder
-from ..models.calendars import Calendar
 from ..constants.calendar_category import CalendarCategory
 from ..errors import CalendarDuplicateError
+from ..models.calendars import Calendar
+from .queries.builders import CalendarQueryBuilder
 
 
 class CalendarRepository:

@@ -36,9 +36,12 @@ src = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "B", "W", "Q", "N", "UP", "ANN", "ASYNC", "COM", "DTZ", "LOG", "G", "INP", "PIE", "T20", "PT", "RET", "SIM", "R"]
+select = ["E", "F", "B", "W", "Q", "N", "UP", "ANN", "ASYNC", "COM", "DTZ", "LOG", "G", "INP", "PIE", "T20", "PT", "RET", "SIM", "R", "I"]
 ignore = ["E999", "D212", "D107", "D203", "ANN101", "ANN204", "B008", "COM812", "ANN401"]
 unfixable = ["B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "tests"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["E402", "D104"]

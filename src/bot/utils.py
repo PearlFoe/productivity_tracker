@@ -1,6 +1,6 @@
 from collections.abc import AsyncIterator
 
-from redis.asyncio import Redis, ConnectionPool
+from redis.asyncio import ConnectionPool, Redis
 
 
 async def redis_pool(redis_dsn: str) -> AsyncIterator[ConnectionPool]:

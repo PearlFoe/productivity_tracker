@@ -4,9 +4,9 @@ from aiogoogle import Aiogoogle
 from aiogoogle.auth.creds import ServiceAccountCreds
 from aiogoogle.excs import HTTPError
 
+from ..errors import InvalidCalendarIDError
 from ..models.calendars import Calendar
 from ..models.clients.calendars import Calendar as APIData
-from ..errors import InvalidCalendarIDError
 
 
 class GoogleCalendarAPIClient:
