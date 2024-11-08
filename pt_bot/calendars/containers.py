@@ -2,7 +2,7 @@ from os import path
 
 from dependency_injector import containers, providers
 
-from bot.core.db.utils import init_db_connection_pool, load_queries
+from pt_bot.core.db.utils import init_db_connection_pool, load_queries
 
 from .db.queries.builders import CalendarQueryBuilder
 from .db.repositories import CalendarRepository
@@ -13,7 +13,7 @@ from .services.cliens import GoogleCalendarAPIClient
 class CalendarContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
-            "bot.calendars.routers",
+            "pt_bot.calendars.routers",
         ],
     )
 
@@ -22,7 +22,7 @@ class CalendarContainer(containers.DeclarativeContainer):
     calendar_unloaded_qb = providers.Singleton(CalendarQueryBuilder)
 
     _calendar_queries_path = providers.Callable(
-        path.join, env.project_dir, "src/calendars/db/queries/sql/calendar.sql"
+        path.join, env.project_dir, "pt_bot/calendars/db/queries/sql/calendar.sql"
     )
     calendar_qb = providers.Callable(
         load_queries,

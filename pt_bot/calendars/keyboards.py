@@ -1,8 +1,8 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.core.buttons.base import ButtonGroup
-from bot.core.keyboards import BaseKeyboard
+from pt_bot.core.buttons.base import ButtonGroup
+from pt_bot.core.keyboards import BaseKeyboard
 
 from .constants import buttons
 

@@ -33,7 +33,7 @@ exclude = [
     "migrations",
 ]
 src = [
-    "bot",
+    "pt_bot",
     "tasks",
     "tests",
 ]
@@ -44,7 +44,7 @@ ignore = ["E999", "D212", "D107", "D203", "ANN101", "ANN204", "B008", "COM812", 
 unfixable = ["B"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["bot", "tasks", "tests"]
+known-first-party = ["pt_bot", "tasks", "tests"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["E402", "D104"]
