@@ -8,7 +8,7 @@ import asyncpg
 
 sys.path.append(path.join(path.dirname(path.realpath(__file__)), ".."))
 
-from src.settings import Settings
+from pt_bot.settings import Settings
 
 
 def _parse_args() -> argparse.Namespace:

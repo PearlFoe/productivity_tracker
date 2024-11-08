@@ -1,4 +1,4 @@
-from src.start.errors import UserAlreadyExistsError
+from pt_bot.start.errors import UserAlreadyExistsError
 
 
 class UserRepositoryMock:

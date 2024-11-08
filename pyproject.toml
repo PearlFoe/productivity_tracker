@@ -17,6 +17,8 @@ dependencies = [
     "aiosql>=12.2",
     "asyncpg>=0.30.0",
     "aiogoogle>=5.13.2",
+    "prefect>=3.1.0",
+    "prefect-docker>=0.6.1",
 ]
 
 [tool.ruff]
@@ -31,7 +33,8 @@ exclude = [
     "migrations",
 ]
 src = [
-    "src",
+    "pt_bot",
+    "tasks",
     "tests",
 ]
 
@@ -41,7 +44,7 @@ ignore = ["E999", "D212", "D107", "D203", "ANN101", "ANN204", "B008", "COM812", 
 unfixable = ["B"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["src", "tests"]
+known-first-party = ["pt_bot", "tasks", "tests"]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["E402", "D104"]

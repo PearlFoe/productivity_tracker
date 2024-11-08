@@ -3,13 +3,13 @@ repos:
   hooks:
   - id: formatter
     name: Ruff Formatter
-    entry: ruff format src/ tests/
+    entry: ruff format pt_bot/ tasks/ tests/
     language: system
     always_run: true
     pass_filenames: false
   - id: linter
     name: Ruff Linter
-    entry: ruff check src/ tests/ --fix
+    entry: ruff check pt_bot/ tasks/ tests/ --fix
     language: system
     always_run: true
     pass_filenames: false

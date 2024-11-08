@@ -4,11 +4,11 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums.parse_mode import ParseMode
 
-from src.bot.commands import COMMANDS
-from src.bot.containers import BotContainer
-from src.calendars import get_router as get_calendar_router
-from src.settings import Settings
-from src.start import get_router as get_start_router
+from pt_bot.bot.commands import COMMANDS
+from pt_bot.bot.containers import BotContainer
+from pt_bot.calendars import get_router as get_calendar_router
+from pt_bot.settings import Settings
+from pt_bot.start import get_router as get_start_router
 
 
 async def _include_routers(dp: Dispatcher, settings: Settings) -> None:

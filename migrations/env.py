@@ -6,7 +6,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
-from src.settings import Settings
+from pt_bot.settings import Settings
 
 env = Settings()
 config = context.config
@@ -57,6 +57,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        version_table="pt_alembic_versions",
     )
 
     with context.begin_transaction():
@@ -83,6 +84,10 @@ async def run_async_migrations() -> None:
     )
 
     async with connectable.connect() as connection:
+        context.configure(
+            url=config.get_main_option("sqlalchemy.url"),
+            version_table="pt_alembic_versions",
+        )
         await connection.run_sync(do_run_migrations)
 
     await connectable.dispose()

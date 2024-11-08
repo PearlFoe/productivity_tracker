@@ -1,9 +1,9 @@
 import pytest
 
-from src.calendars.containers import CalendarContainer
-from src.calendars.models.calendars import Calendar
-from src.calendars.services.calendars import CalendarService
-from src.settings import Settings
+from pt_bot.calendars.containers import CalendarContainer
+from pt_bot.calendars.models.calendars import Calendar
+from pt_bot.calendars.services.calendars import CalendarService
+from pt_bot.settings import Settings
 
 from .mocks import clients, repositories
 

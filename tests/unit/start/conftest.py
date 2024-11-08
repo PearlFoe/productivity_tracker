@@ -1,8 +1,8 @@
 import pytest
 
-from src.settings import Settings
-from src.start.containers import StartContainer
-from src.start.services.users import UserService
+from pt_bot.settings import Settings
+from pt_bot.start.containers import StartContainer
+from pt_bot.start.services.users import UserService
 
 from .mocks.repositories import UserRepositoryMock
 

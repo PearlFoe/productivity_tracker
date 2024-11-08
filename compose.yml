@@ -46,6 +46,44 @@ services:
     volumes:
       - redis-data:/data
 
+  prefect-server:
+    image: prefecthq/prefect:3-python3.11
+    container_name: prefect-server
+    entrypoint: ["/opt/prefect/entrypoint.sh", "prefect", "server", "start"]
+    env_file:
+      - "secrets/.env.prod"
+    ports:
+      - 4200:4200
+    depends_on:
+      db:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; print(urllib.request.urlopen('http://0.0.0.0:4200/api/health').read().decode())\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  prefect-worker-pool:
+    image: prefecthq/prefect:3-python3.11
+    container_name: prefect-worker-pool
+    entrypoint: [
+      "/opt/prefect/entrypoint.sh", 
+      "prefect", "worker", "start", 
+      "--pool", "MainPool",
+      "--type", "docker", 
+      "--base-job-template", "/app/prefect-job-template.json"
+    ]
+    depends_on:
+      prefect-server:
+        condition: service_healthy
+    environment:
+      - EXTRA_PIP_PACKAGES=prefect-docker<0.7 requests<2.32
+    env_file:
+      - "secrets/.env.prod"
+    volumes:
+      - "./prefect-job-template.json:/app/prefect-job-template.json"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
 volumes:
   redis-data:
   db-data:
