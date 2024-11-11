@@ -20,7 +20,7 @@
         "image": {
             "type": "string",
             "title": "Image",
-            "example": "docker.io/prefecthq/prefect:2-latest",
+            "example": "docker.io/prefecthq/prefect:3-latest",
             "description": "The image reference of a container image to use for created jobs. If not set, the latest Prefect image will be used."
         },
         "image_pull_policy": {
@@ -42,7 +42,7 @@
           "title": "Networks",
           "description": "Сети докера, к которым должен быть подключен контейнер при запуске. По умолчанию подключается к сети проекта, которую создает docker compose.",
           "default": [
-            "findinsight_default"
+            "productivity_tracker_default"
           ]
         }
       },
