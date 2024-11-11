@@ -1,7 +1,11 @@
+from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel
 
 
-class Calendar(BaseModel):
-    id: UUID
+class StatisticsFilters(BaseModel):
+    calendar_id: UUID
+    calendar_google_id: str
+    start: datetime
+    end: datetime
