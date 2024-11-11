@@ -15,7 +15,7 @@ repos:
     pass_filenames: false
   - id: unit_tests
     name: Unit tests
-    entry: pytest tests/unit/
+    entry: pytest tests/pt_bot/unit/ tests/tasks/unit/
     language: system
     always_run: true
     pass_filenames: false
