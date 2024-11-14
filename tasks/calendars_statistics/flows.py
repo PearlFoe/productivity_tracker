@@ -1,5 +1,7 @@
-from dependency_injector.wiring import Provide, inject
+from dependency_injector.wiring import Provide
 from prefect import flow
+
+from tasks.core.wiring import inject
 
 from .containers import CalendarsStatisticsContainer
 from .models.flows_params import StatisticsFilters
