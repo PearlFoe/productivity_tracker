@@ -5,7 +5,7 @@
         "auto_remove": {
           "type": "boolean",
           "title": "Auto Remove",
-          "default": true,
+          "default": false,
           "description": "If set, containers will be deleted on completion."
         },
         "env": {

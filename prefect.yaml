@@ -29,7 +29,7 @@ deployments:
   version: null
   tags: []
   description: null
-  entrypoint: tasks.calendars_statistics.flows:parse_calendars_statistics
+  entrypoint: tasks.calendars_statistics:parse_calendars_statistics
   parameters: {}
   work_pool:
     name: MainPool

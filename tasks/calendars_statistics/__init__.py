@@ -1,0 +1,14 @@
+from prefect import flow
+
+from tasks.calendars_statistics.containers import CalendarsStatisticsContainer
+from tasks.core.wiring import wrap_injected
+
+_container = CalendarsStatisticsContainer()
+_container.wire()
+
+from .flows import parse_calendars_statistics
+
+parse_calendars_statistics = flow(
+    wrap_injected(parse_calendars_statistics),
+    name="parse_calendars_statistics",
+)
