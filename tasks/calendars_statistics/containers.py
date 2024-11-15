@@ -39,6 +39,8 @@ class CalendarsStatisticsContainer(containers.DeclarativeContainer):
 
     calendar_repository = providers.Factory(
         CalendarRepository,
+        pool=pool,
+        queries=calendar_qb,
     )
 
     calendar_service = providers.Factory(
@@ -53,4 +55,6 @@ class CalendarsStatisticsContainer(containers.DeclarativeContainer):
 
     statistics_service = providers.Factory(
         StatisticsService,
+        calendar_service=calendar_service,
+        api_client=google_api_client,
     )
