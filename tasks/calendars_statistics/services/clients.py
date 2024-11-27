@@ -35,7 +35,7 @@ class GoogleCalendarAPIClient:
                     calendarId=calendar_id,
                     timeMin=self._format_datetime(start),
                     timeMax=self._format_datetime(end),
-                    singeEvents=True,
+                    singleEvents=True,
                     orderBy="startTime",
                 )
             )

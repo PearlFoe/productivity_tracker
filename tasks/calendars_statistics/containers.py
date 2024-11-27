@@ -14,9 +14,7 @@ from .services.statistics import StatisticsService
 class CalendarsStatisticsContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         auto_wire=False,
-        modules=[
-            "tasks.calendars_statistics.flows",
-        ],
+        modules=[],
     )
 
     env = providers.Configuration()

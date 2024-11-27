@@ -25,7 +25,7 @@ pull:
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
-- name: parse_calendar_statistics
+- name: parse_calendars_statistics
   version: null
   tags: []
   description: null

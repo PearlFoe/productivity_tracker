@@ -12,4 +12,4 @@ class CalendarService:
         self._calendar = calendar_repository
 
     async def save_calendar_statistics(self, calendar_id: UUID, minutes: int, date: date) -> None:
-        self._calendar.save_statistics(calendar_id, minutes, date)
+        await self._calendar.save_statistics(calendar_id, minutes, date)
