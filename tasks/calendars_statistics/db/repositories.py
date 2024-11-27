@@ -13,7 +13,7 @@ class CalendarRepository:
 
     async def save_statistics(self, calendar_id: UUID, minutes: int, date: date) -> None:
         async with self._pool.acquire() as connection:
-            self._queries.save_statistics(
+            await self._queries.save_statistics(
                 connection=connection,
                 calendar_id=calendar_id,
                 minutes=minutes,

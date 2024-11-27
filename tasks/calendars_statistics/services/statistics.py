@@ -22,5 +22,5 @@ class StatisticsService:
         await self._calendar.save_calendar_statistics(
             calendar_id=filters.calendar_id,
             minutes=self._count_total_minutes(events),
-            date=filters.start.date,
+            date=filters.start.date(),
         )
