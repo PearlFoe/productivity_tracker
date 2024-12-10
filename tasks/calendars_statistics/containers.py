@@ -8,7 +8,6 @@ from .db.queries.builders import CalendarQueryBuilder
 from .db.repositories import CalendarRepository
 from .services.calendars import CalendarService
 from .services.clients import GoogleCalendarAPIClient
-
 from .services.statistics import StatisticsService
 
 
