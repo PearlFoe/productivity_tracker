@@ -5,7 +5,6 @@ from pydantic import BaseModel, field_validator
 from tasks.calendars_statistics.constants import GOOGLE_API_DATETIME_RESPONSE_FORMAT
 
 
-
 class Event(BaseModel):
     id: str
     summary: str
