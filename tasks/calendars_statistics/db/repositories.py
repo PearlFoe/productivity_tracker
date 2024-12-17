@@ -1,8 +1,10 @@
+from collections.abc import Iterable
 from datetime import date
 from uuid import UUID
 
 import asyncpg
 
+from ..models.calendars import Calendar
 from .queries.builders import CalendarQueryBuilder
 
 
@@ -19,3 +21,11 @@ class CalendarRepository:
                 minutes=minutes,
                 date=date,
             )
+
+    async def get_calendars_by_timezone(self, timezones: Iterable[str]) -> list[Calendar]:
+        async with self._pool.acquire() as connection:
+            calendars = await self._queries.get_calendars_by_timezone(
+                connection=connection,
+                timezones=timezones,
+            )
+            return [Calendar.model_validate(dict(calendar)) for calendar in calendars]

@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from datetime import date
 from uuid import UUID
 
@@ -25,4 +26,10 @@ class CalendarQueryBuilder:
             calendar_id=calendar_id,
             minutes=minutes,
             date=date,
+        )
+
+    async def get_calendars_by_timezone(self, connection: Connection, timezones: Iterable[str]) -> list[dict]:
+        return await self._queries.get_calendars_by_timezone(
+            connection,
+            timezones=timezones,
         )
