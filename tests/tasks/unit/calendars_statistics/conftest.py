@@ -16,8 +16,9 @@ from .mocks.repositories import CalendarRepository
 
 @pytest.fixture
 def calendars_statistics_container() -> CalendarsStatisticsContainer:
+    settings = Settings()
     container = CalendarsStatisticsContainer()
-    container.env.from_dict(Settings.model_dump())
+    container.env.from_dict(settings.model_dump())
 
     container.google_api_client.override(GoogleCalendarAPIClientMock())
     container.calendar_repository.override(CalendarRepository())
@@ -46,14 +47,17 @@ def calendar(google_id: str) -> Calendar:
 
 @pytest.fixture
 def calendar_events() -> list[Event]:
+    def format_dt(dt: datetime.datetime) -> str:
+        tz_minutes = ":00"
+        return dt.strftime(GOOGLE_API_DATETIME_RESPONSE_FORMAT) + tz_minutes
+
     tz = datetime.UTC
     now = datetime.datetime.now(tz)
-
     return [
         Event(
             id=str(uuid4()),
             summary="Test event title",
-            start=(now - datetime.timedelta(hours=1)).strftime(GOOGLE_API_DATETIME_RESPONSE_FORMAT),
-            end=now,
+            start={"dateTime": format_dt(now - datetime.timedelta(hours=1))},
+            end={"dateTime": format_dt(now)},
         ),
     ]
