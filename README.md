@@ -1,1 +1,2 @@
-# productivity_tracker
+# PT (Productivity Tracker)
+Get statistics about your personal productivity from calendar using simple telegram bot. Load link, grant read access for the bot and get regular reporst with nice dashboards.
