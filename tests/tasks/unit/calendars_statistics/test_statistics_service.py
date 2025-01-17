@@ -1,5 +1,3 @@
-import datetime
-
 import pytest
 from freezegun import freeze_time
 
@@ -12,7 +10,9 @@ class TestStatisticsService:
     @pytest.mark.parametrize(
         "tz",
         [
-            datetime.UTC,
+            "Etc/UTC",
+            "Etc/GMT+1",
+            "Etc/GMT+2",
         ],
     )
     def test_parsing_interval_generation(
