@@ -7,7 +7,7 @@ from tasks.calendars_statistics.constants import GOOGLE_API_DATETIME_RESPONSE_FO
 
 class Event(BaseModel):
     id: str
-    summary: str
+    summary: str | None = None
     start: datetime
     end: datetime
 
