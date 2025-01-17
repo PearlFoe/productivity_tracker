@@ -22,10 +22,11 @@ class CalendarRepository:
                 date=date,
             )
 
-    async def get_calendars_by_timezone(self, timezones: Iterable[str]) -> list[Calendar]:
+    async def get_calendars_to_parse(self, timezones: Iterable[str], filter_date: date) -> list[Calendar]:
         async with self._pool.acquire() as connection:
-            calendars = await self._queries.get_calendars_by_timezone(
+            calendars = await self._queries.get_calendars_to_parse(
                 connection=connection,
                 timezones=timezones,
+                filter_date=filter_date,
             )
             return [Calendar.model_validate(dict(calendar)) for calendar in calendars]

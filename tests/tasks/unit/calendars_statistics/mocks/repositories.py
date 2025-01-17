@@ -18,5 +18,5 @@ class CalendarRepository:
             "date": date,
         }
 
-    async def get_calendars_by_timezone(self, timezones: Iterable[str]) -> list[Calendar]:
+    async def get_calendars_to_parse(self, timezones: Iterable[str], filter_date: date) -> list[Calendar]:
         return [calendar for calendar in self._db["calendars"].values() if calendar.timezone in timezones]
