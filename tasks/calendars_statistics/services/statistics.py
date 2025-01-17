@@ -38,9 +38,8 @@ class StatisticsService:
 
         return timezones_to_parse
 
-    def parsing_interval(
-        self, tz: datetime.timezone = datetime.UTC
-    ) -> tuple[datetime.datetime, datetime.datetime]:
+    def parsing_interval(self, tz: str = "Etc/UTC") -> tuple[datetime.datetime, datetime.datetime]:
+        tz = ZoneInfo(tz)
         return (
             datetime.datetime.now(tz) - datetime.timedelta(days=1),
             datetime.datetime.now(tz),

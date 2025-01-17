@@ -24,8 +24,8 @@ async def schedule_calendars_statistics_parsing() -> None:
     statistics_service: StatisticsService = await CONTAINER.statistics_service()
 
     calendars_to_parse = await statistics_service.get_calendars_to_parse()
-    start, end = statistics_service.parsing_interval()
     for calendar in calendars_to_parse:
+        start, end = statistics_service.parsing_interval(calendar.timezone)
         filters = StatisticsFilters(
             calendar_id=calendar.id,
             calendar_google_id=calendar.google_id,
