@@ -28,8 +28,11 @@ class CalendarQueryBuilder:
             date=date,
         )
 
-    async def get_calendars_by_timezone(self, connection: Connection, timezones: Iterable[str]) -> list[dict]:
-        return await self._queries.get_calendars_by_timezone(
+    async def get_calendars_to_parse(
+        self, connection: Connection, timezones: Iterable[str], filter_date: date
+    ) -> list[dict]:
+        return await self._queries.get_calendars_to_parse(
             connection,
             timezones=timezones,
+            filter_date=filter_date,
         )

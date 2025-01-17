@@ -49,4 +49,11 @@ class StatisticsService:
         timezones_to_parse = self.timezones_to_parse()
         if not timezones_to_parse:
             return []
-        return await self._calendar.get_calendars_by_timezone(timezones=timezones_to_parse)
+
+        tz = timezones_to_parse[0]
+        filter_dt, _ = self.parsing_interval(tz)
+
+        return await self._calendar.get_calendars_to_parse(
+            timezones=timezones_to_parse,
+            filter_date=filter_dt.date(),
+        )
