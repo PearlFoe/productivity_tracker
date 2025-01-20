@@ -39,6 +39,7 @@ class GoogleCalendarAPIClient:
                     orderBy="startTime",
                 )
             )
+            return response["items"]
             return [Event.model_validate(event) for event in response["items"]]
 
     async def events(self, calendar_id: str, start: datetime, end: datetime) -> list[Event]:
