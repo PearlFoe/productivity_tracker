@@ -15,7 +15,14 @@ class StatisticsService:
 
     @staticmethod
     def _count_total_minutes(events: list[Event]) -> int:
-        return sum((event.end - event.start).seconds // 60 for event in events)
+        minutes = 0
+
+        for event in events:
+            start = event.start.datetime or event.start.date
+            end = event.end.datetime or event.end.date
+            minutes += (end - start).seconds // 60
+
+        return minutes
 
     async def parse_statistics(self, filters: StatisticsFilters) -> None:
         events = await self._client.events(
