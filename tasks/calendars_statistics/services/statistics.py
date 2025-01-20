@@ -13,14 +13,19 @@ class StatisticsService:
         self._calendar = calendar_service
         self._client = api_client
 
-    @staticmethod
-    def count_total_minutes(events: list[Event]) -> int:
+    def count_total_minutes(self, events: list[Event], start: datetime, end: datetime) -> int:
         minutes = 0
 
         for event in events:
-            start = event.start.datetime or event.start.date
-            end = event.end.datetime or event.end.date
-            minutes += (end - start).total_seconds() // 60
+            event_start = event.start.datetime or event.start.date
+            period_start = start if event.start.datetime else start.date()
+            event_start = event_start if event_start >= period_start else period_start  # lates start
+
+            event_end = event.end.datetime or event.end.date
+            period_end = end if event.end.datetime else end.date()
+            event_end = event_end if event_end <= period_end else period_end  # earlies end
+
+            minutes += (event_end - event_start).total_seconds() // 60
 
         return minutes
 
@@ -32,7 +37,7 @@ class StatisticsService:
         )
         await self._calendar.save_calendar_statistics(
             calendar_id=filters.calendar_id,
-            minutes=self.count_total_minutes(events),
+            minutes=self.count_total_minutes(events, filters.start, filters.end),
             date=filters.start.date(),
         )
 
