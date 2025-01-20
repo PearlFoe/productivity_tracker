@@ -22,7 +22,7 @@ SELECT
     cc.name AS category
 FROM pt.calendar c
 JOIN pt.calendar_category cc on c.category = cc.id
-JOIN calendars_with_daily_statistics cds ON c.id = cds.calendar_id
+LEFT JOIN calendars_with_daily_statistics cds ON c.id = cds.calendar_id
 WHERE 
     c.timezone = ANY(:timezones) AND
     cds.calendar_id IS NULL;
