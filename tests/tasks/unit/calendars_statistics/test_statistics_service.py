@@ -1,9 +1,20 @@
+from collections.abc import Iterable
+
 import pytest
 from freezegun import freeze_time
 
 from tasks.calendars_statistics.models.calendars import Calendar
 from tasks.calendars_statistics.models.client.events import Event
 from tasks.calendars_statistics.services.statistics import StatisticsService
+
+from .data.events import (
+    SINGE_HOUR_EVENT,
+    SINGLE_ALL_DAY_EVENT,
+    TWO_ALL_DAY_EVENTS,
+    TWO_ALL_DAY_EVENTS__SAME_DAY,
+    TWO_HOUR_EVENTS,
+    TWO_HOUR_EVENTS__SAME_HOUR,
+)
 
 
 class TestStatisticsService:
@@ -57,3 +68,45 @@ class TestStatisticsService:
         calendars = await statistics_service.get_calendars_to_parse()
 
         assert any(calendar.id == c.id for c in calendars)
+
+    @pytest.mark.parametrize(
+        ("events", "expected_minutes"),
+        [
+            (
+                [],
+                0,
+            ),
+            (
+                SINGE_HOUR_EVENT,
+                60,
+            ),
+            (
+                TWO_HOUR_EVENTS,
+                120,
+            ),
+            (
+                SINGLE_ALL_DAY_EVENT,
+                1440,
+            ),
+            (
+                TWO_ALL_DAY_EVENTS,
+                2880,
+            ),
+            (
+                TWO_HOUR_EVENTS__SAME_HOUR,
+                120,
+            ),
+            (
+                TWO_ALL_DAY_EVENTS__SAME_DAY,
+                2880,
+            ),
+        ],
+    )
+    async def test_count_total_minutes(
+        self,
+        events: Iterable[Event],
+        expected_minutes: int,
+        statistics_service: StatisticsService,
+    ):
+        result_minutes = statistics_service.count_total_minutes(events)
+        assert expected_minutes == result_minutes
