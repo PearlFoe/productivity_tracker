@@ -16,10 +16,9 @@ class BaseChart(ABC):
     def add_data(self, title: str, data: Iterable) -> None: ...
 
     @abstractmethod
-    def add_labels(self, labels: Iterable[str]) -> None:
-        raise NotImplementedError
+    def add_labels(self, labels: Iterable[str]) -> None: ...
 
-    def build(self) -> SVG:
+    def render(self) -> SVG:
         return self._chart.render()
 
 

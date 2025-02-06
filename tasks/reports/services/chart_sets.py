@@ -6,7 +6,7 @@ from .charts import BaseChart, PercentPerCalendarChart, TimePerCalendarChart, Ti
 
 class BaseChartSet(BaseModel):
     template: str
-    charts: dict
+    charts: dict[str, BaseChart]
 
     model_config = ConfigDict(
         frozen=True,
