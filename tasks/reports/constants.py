@@ -1,0 +1,1 @@
+REPORT_DATE_FORMAT = "%d %m"
