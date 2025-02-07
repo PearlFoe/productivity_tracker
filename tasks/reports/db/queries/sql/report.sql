@@ -45,3 +45,27 @@ SELECT
 FROM pt.calendar
 WHERE 
     user_id = :user_id;
+
+
+-- name: get_statistics_extremums^
+WITH all_calendars_minutes_sums AS (
+	SELECT
+        sum(stat.minutes) minutes_sum
+	FROM pt.calendar c
+    JOIN pt.statistics stat on c.id = stat.calendar_id
+    WHERE 
+        stat.date BETWEEN :start AND :end
+    GROUP BY stat.date
+),
+one_calendar_minutes_sums AS (
+	SELECT
+        sum(stat.minutes) minutes_sum
+	FROM pt.calendar c
+    JOIN pt.statistics stat on c.id = stat.calendar_id
+    WHERE 
+        stat.date BETWEEN :start AND :end
+    GROUP BY stat.date, stat.calendar_id
+)
+select 
+    (SELECT MAX(minutes_sum) FROM all_calendars_minutes_sums) AS all_calendars_minutes_sum,
+    (SELECT MAX(minutes_sum) FROM one_calendar_minutes_sums) AS one_calendar_minutes_sum;
