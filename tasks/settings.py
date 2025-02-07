@@ -13,6 +13,9 @@ class Settings(BaseSettings):
         populate_by_name=True,
     )
 
+    # Telegram
+    bot_api_token: str
+
     # Google
     google_client_secrets: str
 

@@ -1,12 +1,16 @@
 from concurrent.futures import ThreadPoolExecutor
 from os import path
 
+from aiogram import Bot
 from dependency_injector import containers, providers
 
 from tasks.core.db.utils import init_db_connection_pool, load_queries
 
-from .db.queries.builders import ReportQueryBuilder
-from .db.repositories import ReportRepository
+from .db.queries.reports import ReportQueryBuilder
+from .db.queries.user import UserQueryBuilder
+from .db.repositories.reports import ReportRepository
+from .db.repositories.user import UserRepository
+from .services.distribution import ReportDistributionService
 from .services.report_builders import ReportBuildingService
 
 
@@ -51,4 +55,35 @@ class ReportContainer(containers.DeclarativeContainer):
         ReportBuildingService,
         statistics=report_repository,
         pool=thread_pool,
+    )
+
+    user_unloaded_qb = providers.Singleton(UserQueryBuilder)
+
+    _user_queries_path = providers.Callable(
+        path.join,
+        env.project_dir,
+        "tasks/reports/db/queries/sql/user.sql",
+    )
+
+    user_qb = providers.Factory(
+        load_queries,
+        builder=user_unloaded_qb,
+        path=_user_queries_path,
+    )
+
+    bot = providers.Factory(
+        Bot,
+        token=env.bot_api_token,
+    )
+
+    user_repository = providers.Factory(
+        UserRepository,
+        pool=db_connection_pool,
+        queries=user_qb,
+    )
+
+    report_distribution_service = providers.Factory(
+        ReportDistributionService,
+        bot=bot,
+        user=user_repository,
     )

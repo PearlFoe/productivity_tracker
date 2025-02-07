@@ -2,9 +2,9 @@ from collections.abc import AsyncIterator
 
 import asyncpg
 
-from ..models.flows_params import ReportFiler
-from ..models.statistics import DailyStatistics
-from .queries.builders import ReportQueryBuilder
+from ...models.flows_params import ReportFiler
+from ...models.statistics import DailyStatistics
+from ..queries.reports import ReportQueryBuilder
 
 
 class ReportRepository:

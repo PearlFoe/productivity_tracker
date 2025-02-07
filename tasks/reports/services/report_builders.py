@@ -3,7 +3,7 @@ from collections.abc import AsyncIterator, Iterable
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, timedelta
 
-from ..db.repositories import ReportRepository
+from ..db.repositories.reports import ReportRepository
 from ..models.flows_params import ReportFiler
 from ..models.statistics import DailyStatistics
 from .builders import UserReportBuilder
