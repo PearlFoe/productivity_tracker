@@ -46,6 +46,7 @@ class UserReportBuilder:
 
     def add_labels(self, extremums: StatisticsExtremum, dates: Iterable[date]) -> None:
         for chart in self._chart_set.charts.values():
+            chart.add_title()
             chart.add_labels(
                 y_labels=self._get_hours_labels(chart.type, extremums), x_labels=self._get_dates_labels(dates)
             )

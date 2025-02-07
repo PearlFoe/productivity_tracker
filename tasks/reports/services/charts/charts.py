@@ -17,6 +17,7 @@ class ChartType(StrEnum):
 
 class BaseChart(ABC):
     type: ChartType
+    title: str
 
     def __init__(self, chart: Graph):
         self._chart = chart
@@ -27,12 +28,16 @@ class BaseChart(ABC):
     @abstractmethod
     def add_labels(self, x_labels: Iterable, y_labels: Iterable) -> None: ...
 
+    def add_title(self, title: str = "") -> None:
+        self._chart.title = title or self.title
+
     def render(self) -> SVG:
         return self._chart.render_data_uri()
 
 
 class TimePerCalendarChart(BaseChart):
-    type: ChartType = ChartType.LINE
+    type = ChartType.LINE
+    title = "Scheduled time per calendar"
 
     def add_data(self, title: str, data: Iterable[DailyStatistics]) -> None:
         self._chart.add(
@@ -48,6 +53,7 @@ class TimePerCalendarChart(BaseChart):
 
 class TimeTotalChart(BaseChart):
     type: ChartType = ChartType.STACKED_LINE
+    title = "Scheduled time"
 
     def add_data(self, title: str, data: Iterable[DailyStatistics]) -> None:
         self._chart.add(
@@ -63,6 +69,7 @@ class TimeTotalChart(BaseChart):
 
 class PercentPerCalendarChart(BaseChart):
     type: ChartType = ChartType.PIE
+    title = "Scheduled time relatively to other calendars"
 
     def add_data(self, title: str, data: Iterable[DailyStatistics]) -> None:
         self._chart.add(
