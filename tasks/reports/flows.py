@@ -14,7 +14,7 @@ CONTAINER.env.from_dict(SETTINGS.model_dump())
 
 @flow(name="build_weekly_report")
 async def build_weekly_report(filter: ReportFiler) -> None:
-    report_builder: ReportBuildingService = await ReportContainer.report_building_service()
+    report_builder: ReportBuildingService = await CONTAINER.report_building_service()
 
     await report_builder.build_html(
         filter=filter,

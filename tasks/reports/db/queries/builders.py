@@ -18,23 +18,25 @@ class ReportQueryBuilder:
         connection: Connection,
         *,
         user_id: UUID,
-    ) -> list[tuple[UUID, str]]:
-        return await self._queries.get_user_calendars(
+    ) -> list[str]:
+        response = await self._queries.get_user_calendars(
             connection,
             user_id=user_id,
         )
+        return [str(record) for record in response]
 
     async def get_calendar_statistics(
         self,
         connection: Connection,
         *,
-        calendar_id: UUID,
+        calendar_name: str,
         start: date,
         end: date,
     ) -> list[dict]:
-        return await self._queries.get_calendar_statistics(
+        response = await self._queries.get_calendar_statistics(
             connection,
-            calendar_id=calendar_id,
+            calendar_name=calendar_name,
             start=start,
             end=end,
         )
+        return [dict(record) for record in response]

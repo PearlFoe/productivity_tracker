@@ -23,7 +23,7 @@ class ReportContainer(containers.DeclarativeContainer):
     _report_queries_path = providers.Callable(
         path.join,
         env.project_dir,
-        "tasks/calendars_statistics/db/queries/sql/calendar.sql",
+        "tasks/reports/db/queries/sql/report.sql",
     )
 
     report_qb = providers.Factory(

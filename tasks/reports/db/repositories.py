@@ -19,12 +19,12 @@ class ReportRepository:
         async with self._pool.acquire() as connection:
             calendars = await self._queries.get_user_calendars(connection, user_id=filter.user_id)
 
-            for calendar_id, calendar_name in calendars:
+            for calendar_name in calendars:
                 data = await self._queries.get_calendar_statistics(
                     connection,
-                    calendar_id=calendar_id,
+                    calendar_name=calendar_name,
                     start=filter.start,
                     end=filter.end,
                 )
-                statistics = [DailyStatistics.model_validate(dict(d)) for d in data]
+                statistics = [DailyStatistics.model_validate(d) for d in data]
                 yield calendar_name, statistics
