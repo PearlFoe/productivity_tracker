@@ -18,6 +18,6 @@ class UserReportChartSet(BaseChartSet):
     template: str = "tasks/reports/templates/user_report.html"
     charts: dict[str, BaseChart] = {
         "time_per_calendar": TimePerCalendarChart(chart=Line()),
-        "time_total": TimeTotalChart(chart=StackedLine()),
+        "time_total": TimeTotalChart(chart=StackedLine(fill=True)),
         "percent_per_calendar": PercentPerCalendarChart(chart=Pie()),
     }
