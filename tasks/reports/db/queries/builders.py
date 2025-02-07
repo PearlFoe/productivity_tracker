@@ -23,7 +23,7 @@ class ReportQueryBuilder:
             connection,
             user_id=user_id,
         )
-        return [str(record) for record in response]
+        return [record["name"] for record in response]
 
     async def get_calendar_statistics(
         self,

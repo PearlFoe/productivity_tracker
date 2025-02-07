@@ -19,14 +19,14 @@ class BaseChart(ABC):
     def add_labels(self, labels: Iterable[str]) -> None: ...
 
     def render(self) -> SVG:
-        return self._chart.render()
+        return self._chart.render_data_uri()
 
 
 class TimePerCalendarChart(BaseChart):
     def add_data(self, title: str, data: Iterable[DailyStatistics]) -> None:
         self._chart.add(
             title=title,
-            values=(s.minutes for s in data),
+            values=[s.minutes for s in data],
         )
 
     def add_labels(self, labels: Iterable[str]) -> None:
@@ -38,7 +38,7 @@ class TimeTotalChart(BaseChart):
     def add_data(self, title: str, data: Iterable[DailyStatistics]) -> None:
         self._chart.add(
             title=title,
-            values=(s.minutes for s in data),
+            values=[s.minutes for s in data],
         )
 
     def add_labels(self, labels: Iterable[str]) -> None:

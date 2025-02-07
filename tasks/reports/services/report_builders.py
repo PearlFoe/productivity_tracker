@@ -1,5 +1,5 @@
 import asyncio
-from collections.abc import AsyncIterator, Generator, Iterable
+from collections.abc import AsyncIterator, Iterable
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, timedelta
 
@@ -40,8 +40,8 @@ class ReportBuildingService:
         return await loop.run_in_executor(self._pool, report.build_html)
 
     @staticmethod
-    def _dates_range(start: date, end: date) -> Generator[date]:
-        return (start + timedelta(days) for days in range((end - start).days))
+    def _dates_range(start: date, end: date) -> list[date]:
+        return [start + timedelta(days) for days in range((end - start).days)]
 
     async def build_html(self, filter: ReportFiler, chart_set: BaseChartSet) -> str:
         statistics = self._statistics.get_user_statistics(filter)

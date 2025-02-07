@@ -41,7 +41,6 @@ FROM filled_empties;
 
 -- name: get_user_calendars
 SELECT
-    id,
     name
 FROM pt.calendar
 WHERE 

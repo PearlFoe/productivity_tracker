@@ -24,7 +24,7 @@ class UserReportBuilder:
             chart.add_data(calendar_name, statistics)
 
     def add_labels(self, dates: Iterable[date]) -> None:
-        formated_dates = (d.strftime(REPORT_DATE_FORMAT) for d in dates)
+        formated_dates = [d.strftime(REPORT_DATE_FORMAT) for d in dates]
         for chart in self._chart_set.charts.values():
             chart.add_labels(labels=formated_dates)
 
