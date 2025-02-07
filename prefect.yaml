@@ -25,20 +25,6 @@ pull:
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
-- name: parse_calendars_statistics
-  build: false
-  push: false
-  version: null
-  tags: []
-  description: null
-  entrypoint: tasks.calendars_statistics:parse_calendars_statistics
-  parameters: {}
-  work_pool:
-    name: MainPool
-    work_queue_name: null
-    job_variables: {
-      image: pt-flow-image:latest
-    }
 - name: schedule_calendars_statistics_parsing
   version: null
   tags: []
@@ -55,3 +41,31 @@ deployments:
     - cron: "30 * * * *"
       timezone: "UTC"
       active: true
+- name: parse_calendars_statistics
+  build: false
+  push: false
+  version: null
+  tags: []
+  description: null
+  entrypoint: tasks.calendars_statistics:parse_calendars_statistics
+  parameters: {}
+  work_pool:
+    name: MainPool
+    work_queue_name: null
+    job_variables: {
+      image: pt-flow-image:latest
+    }
+- name: build_weekly_report
+  build: false
+  push: false
+  version: null
+  tags: []
+  description: null
+  entrypoint: tasks.reports:build_weekly_report
+  parameters: {}
+  work_pool:
+    name: MainPool
+    work_queue_name: null
+    job_variables: {
+      image: pt-flow-image:latest
+    }
