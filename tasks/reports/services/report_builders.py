@@ -7,7 +7,7 @@ from ..db.repositories.reports import ReportRepository
 from ..models.flows_params import ReportFiler
 from ..models.statistics import DailyStatistics
 from .builders import UserReportBuilder
-from .chart_sets import BaseChartSet
+from .charts.chart_sets import BaseChartSet
 
 
 class ReportBuildingService:

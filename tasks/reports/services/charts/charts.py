@@ -3,7 +3,7 @@ from collections.abc import Iterable
 
 from pygal import Graph
 
-from ..models.statistics import DailyStatistics
+from tasks.reports.models.statistics import DailyStatistics
 
 SVG = str
 

@@ -4,7 +4,7 @@ from tasks.settings import Settings
 
 from .containers import ReportContainer
 from .models.flows_params import ReportFiler
-from .services.chart_sets import UserReportChartSet
+from .services.charts.chart_sets import UserReportChartSet
 from .services.distribution import ReportDistributionService
 from .services.report_builders import ReportBuildingService
 

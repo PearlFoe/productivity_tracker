@@ -5,7 +5,7 @@ from jinja2 import Template
 
 from ..constants import REPORT_DATE_FORMAT
 from ..models.statistics import DailyStatistics
-from .chart_sets import BaseChartSet
+from .charts.chart_sets import BaseChartSet
 
 
 class UserReportBuilder:
