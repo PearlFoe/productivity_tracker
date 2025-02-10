@@ -21,7 +21,7 @@ date_series AS (
 	SELECT 
 		generate_series(
 			:start,
-			:end,
+			:end - 1,
 			'1 day'
 		) AS date
 ),
