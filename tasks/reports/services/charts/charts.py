@@ -23,13 +23,10 @@ class BaseChart(ABC):
         self._chart = chart
 
     @staticmethod
-    def _format_time_value(minutes: int) -> dict[str, str | int]:
+    def _format_time_value(minutes: int) -> str:
         h = minutes // 60
         m = minutes % 60
-        return {
-            "label": f"{h}h {m}m" if h else f"{m}m",
-            "value": minutes,
-        }
+        return f"{h}h {m}m" if h else f"{m}m"
 
     @abstractmethod
     def add_data(self, title: str, data: Iterable) -> None: ...
@@ -49,10 +46,7 @@ class TimePerCalendarChart(BaseChart):
     title = "Scheduled time per calendar"
 
     def add_data(self, title: str, data: Iterable[DailyStatistics]) -> None:
-        self._chart.add(
-            title=title,
-            values=[self._format_time_value(s.minutes) for s in data],
-        )
+        self._chart.add(title=title, values=[s.minutes for s in data], formatter=self._format_time_value)
 
     def add_labels(self, x_labels: Iterable, y_labels: Iterable) -> None:
         self._chart.x_label_rotation = -45
@@ -65,10 +59,7 @@ class TimeTotalChart(BaseChart):
     title = "Scheduled time"
 
     def add_data(self, title: str, data: Iterable[DailyStatistics]) -> None:
-        self._chart.add(
-            title=title,
-            values=[self._format_time_value(s.minutes) for s in data],
-        )
+        self._chart.add(title=title, values=[s.minutes for s in data], formatter=self._format_time_value)
 
     def add_labels(self, x_labels: Iterable, y_labels: Iterable) -> None:
         self._chart.x_label_rotation = -45
@@ -80,31 +71,9 @@ class PercentPerCalendarChart(BaseChart):
     type: ChartType = ChartType.PIE
     title = "Scheduled time relatively to other calendars"
 
-    @staticmethod
-    def _format_time_value_with_percent(minutes: int, percent: float) -> dict[str, str | int]:
-        h = minutes // 60
-        m = minutes % 60
-        time = f"{h}h {m}m" if h else f"{m}m"
-        return {
-            "label": f"{percent}% ({time})",
-            "value": minutes,
-        }
-
     def add_data(self, title: str, data: Iterable[DailyStatistics]) -> None:
         minutes = sum(s.minutes for s in data)
-        self._chart.add(
-            title=title,
-            values=self._format_time_value(minutes),
-        )
+        self._chart.add(title=title, values=minutes, formatter=self._format_time_value)
 
     def add_labels(self, x_labels: Iterable, y_labels: Iterable) -> None:
-        """
-        There is no built-in option to add percents into labels.
-        This will work only if `add_labels` is called after `add_data`.
-        Otherwise labels will not contain percents, only hours and minutes.
-        """
-        total_minutes = sum(value["value"] for value, _ in self._chart.raw_series)
-        for value, _ in self._chart.raw_series:
-            minutes = value["value"]
-            percent = round(minutes / total_minutes * 100, 1)
-            value.update(self._format_time_value_with_percent(minutes, percent))
+        return

@@ -37,8 +37,6 @@ class ReportBuildingService:
                 calendar_statistics,
             )
 
-        # IMPORTANT: add labels only after values
-        # this order is critical for pie chart's labels
         await loop.run_in_executor(self._pool, report.add_labels, extremums, dates)
 
         return await loop.run_in_executor(self._pool, report.build_html)
