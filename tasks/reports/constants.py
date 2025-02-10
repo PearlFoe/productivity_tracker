@@ -1,1 +1,1 @@
-REPORT_DATE_FORMAT = "%d %m"
+REPORT_DATE_FORMAT = "%A, %d %B"

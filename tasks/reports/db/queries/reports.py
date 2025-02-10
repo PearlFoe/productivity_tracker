@@ -40,3 +40,19 @@ class ReportQueryBuilder:
             end=end,
         )
         return [dict(record) for record in response]
+
+    async def get_statistics_extremums(
+        self,
+        connection: Connection,
+        *,
+        user_id: UUID,
+        start: date,
+        end: date,
+    ) -> dict:
+        response = await self._queries.get_statistics_extremums(
+            connection,
+            user_id=user_id,
+            start=start,
+            end=end,
+        )
+        return dict(response)

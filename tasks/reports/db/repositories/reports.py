@@ -2,8 +2,9 @@ from collections.abc import AsyncIterator
 
 import asyncpg
 
-from ...models.flows_params import ReportFiler
-from ...models.statistics import DailyStatistics
+from tasks.reports.models.flows_params import ReportFiler
+from tasks.reports.models.statistics import DailyStatistics, StatisticsExtremum
+
 from ..queries.reports import ReportQueryBuilder
 
 
@@ -28,3 +29,13 @@ class ReportRepository:
                 )
                 statistics = [DailyStatistics.model_validate(d) for d in data]
                 yield calendar_name, statistics
+
+    async def get_statistics_extremums(self, filter: ReportFiler) -> StatisticsExtremum:
+        async with self._pool.acquire() as connection:
+            data = await self._queries.get_statistics_extremums(
+                connection=connection,
+                user_id=filter.user_id,
+                start=filter.start,
+                end=filter.end,
+            )
+            return StatisticsExtremum.model_validate(data)
