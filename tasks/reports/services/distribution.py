@@ -1,3 +1,4 @@
+import datetime
 from uuid import UUID
 
 from aiogram import Bot
@@ -16,3 +17,10 @@ class ReportDistributionService:
         file = BufferedInputFile(file=report.encode(), filename=file_name)
 
         await self._bot.send_document(user_tg_id, file)
+
+    def get_weekly_report_dates(self) -> tuple[datetime.date, datetime.date]:
+        today = datetime.datetime.now(tz=datetime.UTC).date()
+        return today - datetime.timedelta(days=7), today
+
+    async def get_users_to_send_report(self) -> list[UUID]:
+        return await self._user.get_users_to_send_report()
