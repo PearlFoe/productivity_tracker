@@ -18,14 +18,11 @@ async def build_report(filter: ReportFiler) -> None:
     report_builder: ReportBuildingService = await CONTAINER.report_building_service()
     report_distributor: ReportDistributionService = await CONTAINER.report_distribution_service()
 
-    report = await report_builder.build_html(
+    report = await report_builder.build_report(
         filter=filter,
         chart_set=UserReportChartSet(),
     )
-    await report_distributor.send_report(
-        user_id=filter.user_id,
-        report=report,
-    )
+    await report_distributor.send_report(report)
 
 
 @flow(name="schedule_report_building")
@@ -35,9 +32,10 @@ async def schedule_report_building() -> None:
     start, end = report_distributor.get_weekly_report_dates()
     users = await report_distributor.get_users_to_send_report()
 
-    for user_id in users:
+    for schedule_id, user_id in users:
         filter = ReportFiler(
             user_id=user_id,
+            schedule_id=schedule_id,
             start=start,
             end=end,
         )

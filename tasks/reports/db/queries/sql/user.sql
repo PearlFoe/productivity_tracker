@@ -7,6 +7,7 @@ WHERE
 
 -- name: get_users_to_send_report
 SELECT
+    s.id,
     s.user_id
 FROM pt.schedule s
 WHERE 

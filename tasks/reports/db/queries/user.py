@@ -15,5 +15,6 @@ class UserQueryBuilder:
     async def get_user_telegram_id(self, connection: Connection, *, user_id: UUID) -> int:
         return await self._queries.get_user_telegram_id(connection, user_id=user_id)
 
-    async def get_users_to_send_report(self, connection: Connection) -> list[UUID]:
-        return await self._queries.get_users_to_send_report(connection)
+    async def get_users_to_send_report(self, connection: Connection) -> list[tuple[UUID, UUID]]:
+        data = await self._queries.get_users_to_send_report(connection)
+        return [tuple(d) for d in data]

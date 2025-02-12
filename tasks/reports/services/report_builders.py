@@ -5,6 +5,7 @@ from datetime import date, timedelta
 
 from ..db.repositories.reports import ReportRepository
 from ..models.flows_params import ReportFiler
+from ..models.reports import Report
 from ..models.statistics import DailyStatistics, StatisticsExtremum
 from .builders import UserReportBuilder
 from .charts.chart_sets import BaseChartSet
@@ -45,8 +46,13 @@ class ReportBuildingService:
     def _dates_range(start: date, end: date) -> list[date]:
         return [start + timedelta(days) for days in range((end - start).days)]
 
-    async def build_html(self, filter: ReportFiler, chart_set: BaseChartSet) -> str:
-        statistics = self._statistics.get_user_statistics(filter)
+    async def build_report(self, filter: ReportFiler, chart_set: BaseChartSet) -> Report:
+        statistics = self._statistics.get_statistics(filter)
         dates = self._dates_range(filter.start, filter.end)
         extremums = await self._statistics.get_statistics_extremums(filter)
-        return await self._build_report(statistics, extremums, dates, chart_set)
+        data = await self._build_report(statistics, extremums, dates, chart_set)
+        return Report(
+            user_id=filter.user_id,
+            schedule_id=filter.schedule_id,
+            data=data,
+        )

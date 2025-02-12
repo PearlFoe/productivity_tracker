@@ -3,6 +3,7 @@ from collections.abc import AsyncIterator
 import asyncpg
 
 from tasks.reports.models.flows_params import ReportFiler
+from tasks.reports.models.reports import Report
 from tasks.reports.models.statistics import DailyStatistics, StatisticsExtremum
 
 from ..queries.reports import ReportQueryBuilder
@@ -13,7 +14,7 @@ class ReportRepository:
         self._pool = pool
         self._queries = queries
 
-    async def get_user_statistics(
+    async def get_statistics(
         self,
         filter: ReportFiler,
     ) -> AsyncIterator[tuple[str, list[DailyStatistics]]]:
@@ -39,3 +40,11 @@ class ReportRepository:
                 end=filter.end,
             )
             return StatisticsExtremum.model_validate(data)
+
+    async def save_report_info(self, report: Report) -> None:
+        async with self._pool.acquire() as connection:
+            await self._queries.save_report_info(
+                connection,
+                user_id=report.user_id,
+                schedule_id=report.schedule_id,
+            )

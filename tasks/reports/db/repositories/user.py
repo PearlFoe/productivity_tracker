@@ -14,6 +14,6 @@ class UserRepository:
         async with self._pool.acquire() as connection:
             return await self._queries.get_user_telegram_id(connection, user_id=user_id)
 
-    async def get_users_to_send_report(self) -> list[UUID]:
+    async def get_users_to_send_report(self) -> list[tuple[UUID, UUID]]:
         async with self._pool.acquire() as connection:
             return await self._queries.get_users_to_send_report(connection)

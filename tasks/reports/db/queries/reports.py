@@ -56,3 +56,16 @@ class ReportQueryBuilder:
             end=end,
         )
         return dict(response)
+
+    async def save_report_info(
+        self,
+        connection: Connection,
+        *,
+        user_id: UUID,
+        schedule_id: UUID | None,
+    ) -> None:
+        await self._queries.save_report_info(
+            connection,
+            user_id=user_id,
+            schedule_id=schedule_id,
+        )
