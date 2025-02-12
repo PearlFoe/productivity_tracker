@@ -19,7 +19,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.execute("UPDATE pt.user SET timezone='Etc/UTC';")
+    op.execute("UPDATE pt.user SET timezone='Etc/UTC' WHERE timezone IS NULL;")
     
     op.alter_column("user", "timezone", nullable=False, server_default="Etc/UTC", schema="pt")
 

@@ -24,8 +24,7 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), server_default=sa.text('gen_random_uuid()'), nullable=False),
         sa.Column("user_id", sa.UUID(), nullable=False),
         sa.Column("name", sa.Text(), nullable=False),
-        sa.Column("time", sa.Time(), nullable=False),
-        sa.Column("timezone", sa.Text(), nullable=False),
+        sa.Column("time", sa.Time(timezone=True), nullable=False),
         sa.Column(
             "created_dt",
             sa.DateTime(timezone=True),
@@ -39,6 +38,7 @@ def upgrade() -> None:
             onupdate=sa.text("timezone('UTC', now())"),
             nullable=False
         ),
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_schedule')),
         sa.ForeignKeyConstraint(["user_id"], ["pt.user.id"], name="fk_schedule_user_id_user_id"),
         schema="pt",
     )
@@ -47,7 +47,7 @@ def upgrade() -> None:
         "report",
         sa.Column('id', sa.UUID(), server_default=sa.text('gen_random_uuid()'), nullable=False),
         sa.Column("user_id", sa.UUID(), nullable=False),
-        sa.Column("schedule_id", sa.UUID(), nullable=False),
+        sa.Column("schedule_id", sa.UUID(), nullable=True),
         sa.Column("name", sa.Text(), nullable=False),
         sa.Column(
             "created_dt",
@@ -62,6 +62,7 @@ def upgrade() -> None:
             onupdate=sa.text("timezone('UTC', now())"),
             nullable=False
         ),
+        sa.PrimaryKeyConstraint('id', name=op.f('pk_report')),
         sa.ForeignKeyConstraint(["user_id"], ["pt.user.id"], name="fk_report_user_id_user_id"),
         sa.ForeignKeyConstraint(["schedule_id"], ["pt.schedule.id"], name="fk_report_schedule_id_schedule_id"),
         schema="pt",
