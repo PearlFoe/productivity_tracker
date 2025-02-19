@@ -5,6 +5,8 @@ from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
 from dependency_injector.wiring import Provide, inject
 
+from pt_bot.core.models.user import User
+
 from .constants.messages import CalendarMessages
 from .containers import CalendarContainer
 from .errors import CalendarDuplicateError, InvalidCalendarIDError
@@ -26,10 +28,11 @@ async def calendar_command(message: types.Message, state: FSMContext) -> None:
 async def calendar_link_processing(
     message: types.Message,
     state: FSMContext,
+    user: User,
     calendar_service: CalendarService = Provide[CalendarContainer.calendar_service],
 ) -> None:
     try:
-        calendar_id = await calendar_service.add_calendar(message.from_user.id, message.text)
+        calendar_id = await calendar_service.add_calendar(user, message.text)
     except InvalidCalendarIDError:
         await message.answer(text=CalendarMessages.INVALID_CALENDAR_LINK)
         await state.clear()

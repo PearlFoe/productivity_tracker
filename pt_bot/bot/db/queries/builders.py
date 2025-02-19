@@ -21,4 +21,3 @@ class UserQueryBuilder:
             telegram_id=telegram_id,
         )
         return dict(response)
-

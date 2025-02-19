@@ -1,10 +1,11 @@
 import datetime
+from uuid import UUID
 
 from pydantic import BaseModel
 
 
 class Schedule(BaseModel):
-    user_id: str
+    user_id: UUID
     name: str
     time: datetime.time
 

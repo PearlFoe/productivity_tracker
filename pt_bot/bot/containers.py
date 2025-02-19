@@ -41,9 +41,7 @@ class BotContainer(containers.DeclarativeContainer):
 
     user_unloaded_qb = providers.Singleton(UserQueryBuilder)
 
-    _user_queries_path = providers.Callable(
-        path.join, env.project_dir, "pt_bot/bot/db/queries/sql/user.sql"
-    )
+    _user_queries_path = providers.Callable(path.join, env.project_dir, "pt_bot/bot/db/queries/sql/user.sql")
     user_qb = providers.Callable(
         load_queries,
         builder=user_unloaded_qb,
@@ -59,5 +57,3 @@ class BotContainer(containers.DeclarativeContainer):
         UserRepository,
         pool=db_pool,
     )
-
-
