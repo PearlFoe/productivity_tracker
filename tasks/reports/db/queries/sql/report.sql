@@ -72,5 +72,5 @@ select
 
 
 -- name: save_report_info!
-INSERT INTO pt.report (user_id, schedule_id) 
-VALUES (:user_id, :schedule_id);
+INSERT INTO pt.report (user_id, schedule_id, name) 
+VALUES (:user_id, :schedule_id, :name);

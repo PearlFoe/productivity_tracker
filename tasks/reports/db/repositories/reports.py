@@ -47,4 +47,5 @@ class ReportRepository:
                 connection,
                 user_id=report.user_id,
                 schedule_id=report.schedule_id,
+                name=report.name,
             )

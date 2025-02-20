@@ -63,9 +63,11 @@ class ReportQueryBuilder:
         *,
         user_id: UUID,
         schedule_id: UUID | None,
+        name: str,
     ) -> None:
         await self._queries.save_report_info(
             connection,
             user_id=user_id,
             schedule_id=schedule_id,
+            name=name,
         )
