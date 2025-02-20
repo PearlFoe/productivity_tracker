@@ -7,11 +7,14 @@ from pt_bot.core.db.utils import init_db_connection_pool, load_queries, redis_po
 
 from .db.queries.builders import UserQueryBuilder
 from .db.repositories import UserCacheRepository, UserRepository
+from .services.user import UserService
 
 
 class CoreContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
-        modules=[],
+        modules=[
+            "pt_bot.calendars.routers",
+        ],
     )
 
     env = providers.Configuration()
@@ -33,13 +36,13 @@ class CoreContainer(containers.DeclarativeContainer):
 
     user_cache_repository = providers.Factory(
         UserCacheRepository,
-        pool=redis_pool,
+        pool=redis_connection_pool,
         ttl=env.user_data_ttl,
     )
 
     user_unloaded_qb = providers.Singleton(UserQueryBuilder)
 
-    _user_queries_path = providers.Callable(path.join, env.project_dir, "pt_bot/bot/db/queries/sql/user.sql")
+    _user_queries_path = providers.Callable(path.join, env.project_dir, "pt_bot/core/db/queries/sql/user.sql")
     user_qb = providers.Callable(
         load_queries,
         builder=user_unloaded_qb,
@@ -54,4 +57,11 @@ class CoreContainer(containers.DeclarativeContainer):
     user_repository = providers.Factory(
         UserRepository,
         pool=db_pool,
+        queries=user_qb,
+    )
+
+    user_service = providers.Factory(
+        UserService,
+        storage=user_repository,
+        cache=user_cache_repository,
     )

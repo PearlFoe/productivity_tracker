@@ -22,3 +22,8 @@ SET
         WHERE cc.name = :category
     )
 WHERE c.id = :calendar_id;
+
+-- name: add_schedule!
+INSERT INTO pt.schedule
+(user_id, name, time)
+VALUES (:user_id, :name, :time);

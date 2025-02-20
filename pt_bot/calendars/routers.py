@@ -6,6 +6,7 @@ from aiogram.fsm.context import FSMContext
 from dependency_injector.wiring import Provide, inject
 
 from pt_bot.core.models.user import User
+from pt_bot.core.utils import inject_user
 
 from .constants.messages import CalendarMessages
 from .containers import CalendarContainer
@@ -25,6 +26,7 @@ async def calendar_command(message: types.Message, state: FSMContext) -> None:
 
 @router.message(CalendarState.LINK)
 @inject
+@inject_user
 async def calendar_link_processing(
     message: types.Message,
     state: FSMContext,
