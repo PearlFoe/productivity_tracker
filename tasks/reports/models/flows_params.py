@@ -8,3 +8,4 @@ class ReportFiler(BaseModel):
     user_id: UUID
     start: date
     end: date
+    schedule_id: UUID | None = None

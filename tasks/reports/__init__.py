@@ -1,5 +1,3 @@
-from .flows import build_weekly_report
+from .flows import build_report, schedule_report_building
 
-__all__ = [
-    "build_weekly_report",
-]
+__all__ = ["build_report", "schedule_report_building"]

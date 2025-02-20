@@ -1,3 +1,4 @@
+import datetime
 from uuid import UUID
 
 import aiosql
@@ -15,11 +16,12 @@ class CalendarQueryBuilder:
     async def add_calendar(
         self,
         connection: Connection,
+        *,
         tg_id: int,
         google_id: str,
         name: str,
         timezone: str,
-        description: str = None,
+        description: str | None = None,
     ) -> UUID:
         return await self._queries.add_calendar(
             connection,
@@ -31,6 +33,33 @@ class CalendarQueryBuilder:
         )
 
     async def update_calendar_category(
-        self, connection: Connection, calendar_id: UUID, category: str
+        self,
+        connection: Connection,
+        *,
+        calendar_id: UUID,
+        category: str,
     ) -> None:
         await self._queries.update_calendar_category(connection, calendar_id=calendar_id, category=category)
+
+    async def user_has_schedule(
+        self,
+        connection: Connection,
+        *,
+        user_id: UUID,
+    ) -> bool:
+        return await self._queries.user_has_schedule(connection, user_id=user_id)
+
+    async def add_schedule(
+        self,
+        connection: Connection,
+        *,
+        user_id: UUID,
+        name: str,
+        time: datetime.time,
+    ) -> None:
+        await self._queries.add_schedule(
+            connection,
+            user_id=user_id,
+            name=name,
+            time=time,
+        )

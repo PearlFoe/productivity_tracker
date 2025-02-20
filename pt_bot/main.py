@@ -4,9 +4,9 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums.parse_mode import ParseMode
 
-from pt_bot.bot.commands import COMMANDS
-from pt_bot.bot.containers import BotContainer
 from pt_bot.calendars import get_router as get_calendar_router
+from pt_bot.core.commands import COMMANDS
+from pt_bot.core.containers import CoreContainer
 from pt_bot.settings import Settings
 from pt_bot.start import get_router as get_start_router
 
@@ -22,12 +22,9 @@ async def _include_routers(dp: Dispatcher, settings: Settings) -> None:
         dp.include_router(router)
 
 
-# TODO: Add containers resources startup and shutdown
-
-
 async def main() -> None:
     settings = Settings()
-    container = BotContainer()
+    container = CoreContainer()
     container.env.from_dict(settings.model_dump())
     await container.init_resources()
 

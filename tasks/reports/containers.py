@@ -86,4 +86,5 @@ class ReportContainer(containers.DeclarativeContainer):
         ReportDistributionService,
         bot=bot,
         user=user_repository,
+        report=report_repository,
     )

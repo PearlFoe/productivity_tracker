@@ -5,6 +5,7 @@ import asyncpg
 from ..constants.calendar_category import CalendarCategory
 from ..errors import CalendarDuplicateError
 from ..models.calendars import Calendar
+from ..models.schedules import Schedule
 from .queries.builders import CalendarQueryBuilder
 
 
@@ -33,4 +34,20 @@ class CalendarRepository:
                 connection=connection,
                 calendar_id=calendar_id,
                 category=calendar_category,
+            )
+
+    async def user_has_schedule(self, user_id: UUID) -> bool:
+        async with self._pool.acquire() as connection:
+            return await self._queries.user_has_schedule(
+                connection=connection,
+                user_id=user_id,
+            )
+
+    async def add_schedule(self, schedule: Schedule) -> None:
+        async with self._pool.acquire() as connection:
+            await self._queries.add_schedule(
+                connection,
+                user_id=schedule.user_id,
+                name=schedule.name,
+                time=schedule.time,
             )

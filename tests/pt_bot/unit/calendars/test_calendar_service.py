@@ -1,10 +1,11 @@
 import pytest
-from aiogram.types.user import User
 
 from pt_bot.calendars.constants.calendar_category import CalendarCategory
 from pt_bot.calendars.errors import CalendarDuplicateError, InvalidCalendarIDError
 from pt_bot.calendars.models.calendars import Calendar
+from pt_bot.calendars.models.schedules import DefaultWeeklyReportSchedule
 from pt_bot.calendars.services.calendars import CalendarService
+from pt_bot.core.models.user import User
 
 
 class TestCalendarService:
@@ -16,11 +17,12 @@ class TestCalendarService:
     ):
         calendar_service._client._db[calendar.google_id] = calendar
         id_ = await calendar_service.add_calendar(
-            user_tg_id=user.id,
+            user=user,
             calendar_id=calendar.google_id,
         )
 
-        assert id_ in calendar_service._calendar._db
+        assert id_ in calendar_service._calendar._db["calendars"]
+        assert calendar_service._calendar._db["schedules"]
 
     async def test_add_calendar__duplicate(
         self,
@@ -30,10 +32,10 @@ class TestCalendarService:
     ):
         calendar_service._client._db[calendar.google_id] = calendar
 
-        await calendar_service.add_calendar(user.id, calendar.google_id)
+        await calendar_service.add_calendar(user, calendar.google_id)
 
         with pytest.raises(CalendarDuplicateError):
-            await calendar_service.add_calendar(user.id, calendar.google_id)
+            await calendar_service.add_calendar(user, calendar.google_id)
 
     async def test_add_calendar__invalid_id(
         self,
@@ -42,7 +44,7 @@ class TestCalendarService:
         calendar: Calendar,
     ):
         with pytest.raises(InvalidCalendarIDError):
-            await calendar_service.add_calendar(user.id, calendar.google_id)
+            await calendar_service.add_calendar(user, calendar.google_id)
 
     async def test_update_calendar_category(
         self,
@@ -53,10 +55,28 @@ class TestCalendarService:
         calendar_service._client._db[calendar.google_id] = calendar
         category = CalendarCategory.WORK
 
-        calendar_id = await calendar_service.add_calendar(user.id, calendar.google_id)
+        calendar_id = await calendar_service.add_calendar(user, calendar.google_id)
         await calendar_service.update_calendar_category(
             calendar_id=calendar_id,
             calendar_category=category,
         )
 
-        assert calendar_service._calendar._db[calendar_id].category == category
+        assert calendar_service._calendar._db["calendars"][calendar_id].category == category
+
+    async def test_default_schedule_does_not_create(
+        self,
+        calendar_service: CalendarService,
+        user: User,
+        calendar: Calendar,
+    ):
+        calendar_service._client._db[calendar.google_id] = calendar
+        calendar_service._calendar._db["calendars"].clear()
+        calendar_service._calendar._db["schedules"] = [DefaultWeeklyReportSchedule(user_id=user.id)]
+
+        id_ = await calendar_service.add_calendar(
+            user=user,
+            calendar_id=calendar.google_id,
+        )
+
+        assert id_ in calendar_service._calendar._db["calendars"]
+        assert len(calendar_service._calendar._db["schedules"]) == 1

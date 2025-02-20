@@ -55,13 +55,27 @@ deployments:
     job_variables: {
       image: pt-flow-image:latest
     }
-- name: build_weekly_report
+- name: build_report
   build: false
   push: false
   version: null
   tags: []
   description: null
-  entrypoint: tasks.reports:build_weekly_report
+  entrypoint: tasks.reports:build_report
+  parameters: {}
+  work_pool:
+    name: MainPool
+    work_queue_name: null
+    job_variables: {
+      image: pt-flow-image:latest
+    }
+- name: schedule_report_building
+  build: false
+  push: false
+  version: null
+  tags: []
+  description: null
+  entrypoint: tasks.reports:schedule_report_building
   parameters: {}
   work_pool:
     name: MainPool

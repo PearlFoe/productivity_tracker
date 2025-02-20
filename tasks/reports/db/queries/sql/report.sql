@@ -69,3 +69,8 @@ one_calendar_minutes_sums AS (
 select 
     (SELECT MAX(minutes_sum) FROM all_calendars_minutes_sums) AS all_calendars_minutes_sum,
     (SELECT MAX(minutes_sum) FROM one_calendar_minutes_sums) AS one_calendar_minutes_sum;
+
+
+-- name: save_report_info!
+INSERT INTO pt.report (user_id, schedule_id, name) 
+VALUES (:user_id, :schedule_id, :name);
