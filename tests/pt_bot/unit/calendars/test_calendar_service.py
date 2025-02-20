@@ -3,6 +3,7 @@ import pytest
 from pt_bot.calendars.constants.calendar_category import CalendarCategory
 from pt_bot.calendars.errors import CalendarDuplicateError, InvalidCalendarIDError
 from pt_bot.calendars.models.calendars import Calendar
+from pt_bot.calendars.models.schedules import DefaultWeeklyReportSchedule
 from pt_bot.calendars.services.calendars import CalendarService
 from pt_bot.core.models.user import User
 
@@ -61,3 +62,21 @@ class TestCalendarService:
         )
 
         assert calendar_service._calendar._db["calendars"][calendar_id].category == category
+
+    async def test_default_schedule_does_not_create(
+        self,
+        calendar_service: CalendarService,
+        user: User,
+        calendar: Calendar,
+    ):
+        calendar_service._client._db[calendar.google_id] = calendar
+        calendar_service._calendar._db["calendars"].clear()
+        calendar_service._calendar._db["schedules"] = [DefaultWeeklyReportSchedule(user_id=user.id)]
+
+        id_ = await calendar_service.add_calendar(
+            user=user,
+            calendar_id=calendar.google_id,
+        )
+
+        assert id_ in calendar_service._calendar._db["calendars"]
+        assert len(calendar_service._calendar._db["schedules"]) == 1

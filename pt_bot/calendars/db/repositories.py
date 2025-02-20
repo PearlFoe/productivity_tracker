@@ -36,6 +36,13 @@ class CalendarRepository:
                 category=calendar_category,
             )
 
+    async def user_has_schedule(self, user_id: UUID) -> bool:
+        async with self._pool.acquire() as connection:
+            return await self._queries.user_has_schedule(
+                connection=connection,
+                user_id=user_id,
+            )
+
     async def add_schedule(self, schedule: Schedule) -> None:
         async with self._pool.acquire() as connection:
             await self._queries.add_schedule(

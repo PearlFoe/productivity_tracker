@@ -41,6 +41,14 @@ class CalendarQueryBuilder:
     ) -> None:
         await self._queries.update_calendar_category(connection, calendar_id=calendar_id, category=category)
 
+    async def user_has_schedule(
+        self,
+        connection: Connection,
+        *,
+        user_id: UUID,
+    ) -> bool:
+        return await self._queries.user_has_schedule(connection, user_id=user_id)
+
     async def add_schedule(
         self,
         connection: Connection,

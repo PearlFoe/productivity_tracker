@@ -28,5 +28,8 @@ class CalendarRepoositoryMock:
     async def update_calendar_category(self, calendar_id: UUID, calendar_category: CalendarCategory) -> None:
         self._db["calendars"][calendar_id].category = str(calendar_category)
 
+    async def user_has_schedule(self, user_id: UUID) -> bool:
+        return any(s.user_id == user_id for s in self._db["schedules"])
+
     async def add_schedule(self, schedule: Schedule) -> None:
         self._db["schedules"].append(schedule)

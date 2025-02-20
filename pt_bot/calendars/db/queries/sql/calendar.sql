@@ -23,6 +23,15 @@ SET
     )
 WHERE c.id = :calendar_id;
 
+-- name: user_has_schedule$
+SELECT
+    EXISTS(
+        SELECT id
+        FROM pt.schedule
+        WHERE 
+            user_id = :user_id
+    );
+
 -- name: add_schedule!
 INSERT INTO pt.schedule
 (user_id, name, time)

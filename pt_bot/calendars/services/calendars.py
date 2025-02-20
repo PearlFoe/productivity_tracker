@@ -22,7 +22,8 @@ class CalendarService:
         inner_calendar_id = await self._calendar.add_calendar(user.telegram_id, calendar)
 
         schedule = DefaultWeeklyReportSchedule(user_id=user.id)
-        await self._calendar.add_schedule(schedule)
+        if not await self._calendar.user_has_schedule(user_id=user.id):
+            await self._calendar.add_schedule(schedule)
 
         return inner_calendar_id
 
