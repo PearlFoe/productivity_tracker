@@ -9,11 +9,9 @@ from .db.queries.builders import UserQueryBuilder
 from .db.repositories import UserCacheRepository, UserRepository
 
 
-class BotContainer(containers.DeclarativeContainer):
+class CoreContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
-        modules=[
-            "pt_bot.middlewares.user",
-        ],
+        modules=[],
     )
 
     env = providers.Configuration()

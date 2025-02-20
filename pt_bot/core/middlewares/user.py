@@ -7,7 +7,7 @@ from dependency_injector.wiring import Provide, inject
 
 from pt_bot.core.models.user import User
 
-from ..containers import BotContainer
+from ...core.containers import CoreContainer
 from ..db.repositories import UserCacheRepository, UserRepository
 
 
@@ -15,8 +15,8 @@ class UserInjector(BaseMiddleware):
     @inject
     def __init__(
         self,
-        storage: UserRepository = Provide[BotContainer.user_repository],
-        cache: UserCacheRepository = Provide[BotContainer.user_cache_repository],
+        storage: UserRepository = Provide[CoreContainer.user_repository],
+        cache: UserCacheRepository = Provide[CoreContainer.user_cache_repository],
     ):
         self._storage = storage
         self._cache = cache

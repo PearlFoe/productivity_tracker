@@ -3,7 +3,7 @@ from redis.asyncio import ConnectionPool, Redis
 
 from pt_bot.core.models.user import User
 
-from .queries.builders import UserQueryBuilder
+from ..db.queries.builders import UserQueryBuilder
 
 
 class UserRepository:
