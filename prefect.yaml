@@ -83,3 +83,7 @@ deployments:
     job_variables: {
       image: pt-flow-image:latest
     }
+  schedules:
+    - cron: "00 * * * *"
+      timezone: "UTC"
+      active: true
