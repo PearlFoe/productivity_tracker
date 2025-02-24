@@ -44,7 +44,7 @@ SELECT
     name
 FROM pt.calendar
 WHERE 
-    user_id = :user_id;
+    user_id = :user_id AND disabled IS NULL;
 
 
 -- name: get_statistics_extremums^
