@@ -9,7 +9,7 @@ VALUES (
 
 -- name: get_calendars_to_parse
 WITH calendars_with_daily_statistics AS (
-    SELECT s.calendar_id
+    SELECT DISTINCT s.calendar_id
     FROM pt.statistics s
     WHERE s.date = :filter_date
 )
@@ -21,8 +21,9 @@ SELECT
     c.timezone,
     cc.name AS category
 FROM pt.calendar c
-JOIN pt.calendar_category cc on c.category = cc.id
+JOIN pt.calendar_category cc ON c.category = cc.id
 LEFT JOIN calendars_with_daily_statistics cds ON c.id = cds.calendar_id
 WHERE 
     c.timezone = ANY(:timezones) AND
+    c.disabled IS NULL AND
     cds.calendar_id IS NULL;

@@ -63,3 +63,25 @@ class CalendarQueryBuilder:
             name=name,
             time=time,
         )
+
+    async def disable_calendar(
+        self,
+        connection: Connection,
+        *,
+        user_id: UUID,
+        calendar_name: str,
+    ) -> None:
+        await self._queries.disable_calendar(
+            connection,
+            user_id=user_id,
+            calendar_name=calendar_name,
+        )
+
+    async def get_calendar_names(
+        self,
+        connection: Connection,
+        *,
+        user_id: UUID,
+    ) -> list[str]:
+        response = await self._queries.get_calendar_names(connection, user_id=user_id)
+        return [record["name"] for record in response]

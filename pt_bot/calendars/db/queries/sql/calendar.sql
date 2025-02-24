@@ -36,3 +36,18 @@ SELECT
 INSERT INTO pt.schedule
 (user_id, name, time)
 VALUES (:user_id, :name, :time);
+
+-- name: disable_calendar!
+UPDATE pt.calendar
+SET disabled=now()
+WHERE 
+    user_id = :user_id AND
+    name = :calendar_name;
+
+-- name: get_calendar_names
+SELECT
+    name
+FROM pt.calendar
+WHERE
+    user_id = :user_id AND
+    disabled IS NULL;

@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pt_bot.core.models.user import User
 
-from ..constants.calendar_category import CalendarCategory
+from ..constants.callback_data import CalendarCategory
 from ..db.repositories import CalendarRepository
 from ..models.schedules import DefaultWeeklyReportSchedule
 from .cliens import GoogleCalendarAPIClient
@@ -29,3 +29,12 @@ class CalendarService:
 
     async def update_calendar_category(self, calendar_id: UUID, calendar_category: CalendarCategory) -> None:
         await self._calendar.update_calendar_category(calendar_id, calendar_category)
+
+    async def disable_calendar(self, user: User, calendar_name: str) -> None:
+        await self._calendar.disable_calendar(
+            user_id=user.id,
+            calendar_name=calendar_name,
+        )
+
+    async def get_calendar_names(self, user: User) -> list[str]:
+        return await self._calendar.get_calendar_names(user.id)

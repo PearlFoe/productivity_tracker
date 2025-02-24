@@ -1,6 +1,6 @@
 import pytest
 
-from pt_bot.calendars.constants.calendar_category import CalendarCategory
+from pt_bot.calendars.constants.callback_data import CalendarCategory
 from pt_bot.calendars.errors import CalendarDuplicateError, InvalidCalendarIDError
 from pt_bot.calendars.models.calendars import Calendar
 from pt_bot.calendars.models.schedules import DefaultWeeklyReportSchedule

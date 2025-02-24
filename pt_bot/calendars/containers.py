@@ -12,7 +12,7 @@ from .services.cliens import GoogleCalendarAPIClient
 
 class CalendarContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
-        modules=[
+        packages=[
             "pt_bot.calendars.routers",
         ],
     )

@@ -12,7 +12,7 @@ from .services.user import UserService
 
 class CoreContainer(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
-        modules=[
+        packages=[
             "pt_bot.calendars.routers",
         ],
     )
