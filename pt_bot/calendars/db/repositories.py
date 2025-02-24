@@ -2,7 +2,7 @@ from uuid import UUID
 
 import asyncpg
 
-from ..constants.calendar_category import CalendarCategory
+from ..constants.callback_data import CalendarCategory
 from ..errors import CalendarDuplicateError
 from ..models.calendars import Calendar
 from ..models.schedules import Schedule
@@ -50,4 +50,19 @@ class CalendarRepository:
                 user_id=schedule.user_id,
                 name=schedule.name,
                 time=schedule.time,
+            )
+
+    async def disable_calendar(self, user_id: UUID, calendar_name: str) -> None:
+        async with self._pool.acquire() as connection:
+            await self._queries.disable_calendar(
+                connection,
+                user_id=user_id,
+                calendar_name=calendar_name,
+            )
+
+    async def get_calendar_names(self, user_id: UUID) -> list[str]:
+        async with self._pool.acquire() as connection:
+            return await self._queries.get_calendar_names(
+                connection,
+                user_id=user_id,
             )
