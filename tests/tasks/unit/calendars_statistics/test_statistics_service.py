@@ -1,11 +1,14 @@
+import asyncio
 import datetime
 from collections.abc import Iterable
 
 import pytest
 from freezegun import freeze_time
+from tenacity import RetryError
 
 from tasks.calendars_statistics.models.calendars import Calendar
 from tasks.calendars_statistics.models.client.events import Event
+from tasks.calendars_statistics.models.flows_params import StatisticsFilters
 from tasks.calendars_statistics.services.statistics import StatisticsService
 
 from .data.events import (
@@ -140,3 +143,21 @@ class TestStatisticsService:
     ):
         result_minutes = statistics_service.count_total_minutes(events, start, end)
         assert expected_minutes == result_minutes
+
+    async def test_parse_statistics_retry_error_handling(
+        self,
+        filters: StatisticsFilters,
+        statistics_service: StatisticsService,
+    ):
+        async def failed_retry_events(*args, **kwargs) -> list:
+            future = asyncio.Future()
+            future.set_result(None)
+            raise RetryError(future)
+
+        statistics_service._client.events = failed_retry_events
+
+        await statistics_service.parse_statistics(filters)
+        statistics = statistics_service._calendar._calendar._db["statistics"]
+
+        assert filters.calendar_id in statistics
+        assert statistics[filters.calendar_id]["minutes"] == 0

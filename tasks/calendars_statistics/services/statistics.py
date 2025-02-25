@@ -1,6 +1,8 @@
 import datetime
 from zoneinfo import ZoneInfo, available_timezones
 
+from tenacity import RetryError
+
 from ..models.calendars import Calendar
 from ..models.client.events import Event
 from ..models.flows_params import StatisticsFilters
@@ -30,11 +32,15 @@ class StatisticsService:
         return minutes
 
     async def parse_statistics(self, filters: StatisticsFilters) -> None:
-        events = await self._client.events(
-            calendar_id=filters.calendar_google_id,
-            start=filters.start,
-            end=filters.end,
-        )
+        try:
+            events = await self._client.events(
+                calendar_id=filters.calendar_google_id,
+                start=filters.start,
+                end=filters.end,
+            )
+        except RetryError:
+            events = []
+
         await self._calendar.save_calendar_statistics(
             calendar_id=filters.calendar_id,
             minutes=self.count_total_minutes(events, filters.start, filters.end),
