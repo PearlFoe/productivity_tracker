@@ -7,6 +7,7 @@ from tasks.calendars_statistics.constants import GOOGLE_API_DATETIME_RESPONSE_FO
 from tasks.calendars_statistics.containers import CalendarsStatisticsContainer
 from tasks.calendars_statistics.models.calendars import Calendar
 from tasks.calendars_statistics.models.client.events import Event
+from tasks.calendars_statistics.models.flows_params import StatisticsFilters
 from tasks.calendars_statistics.services.statistics import StatisticsService
 from tasks.settings import Settings
 
@@ -39,6 +40,7 @@ def google_id() -> str:
 @pytest.fixture
 def calendar(google_id: str) -> Calendar:
     return Calendar(
+        id=uuid4(),
         google_id=google_id,
         name="test_calendar_name",
         timezone="Etc/UTC",
@@ -61,3 +63,13 @@ def calendar_events() -> list[Event]:
             end={"dateTime": format_dt(now)},
         ),
     ]
+
+
+@pytest.fixture
+def filters(calendar: Calendar):
+    return StatisticsFilters(
+        calendar_id=calendar.id,
+        calendar_google_id=calendar.google_id,
+        start=datetime.datetime.now(tz=datetime.UTC) - datetime.timedelta(days=1),
+        end=datetime.datetime.now(tz=datetime.UTC),
+    )
