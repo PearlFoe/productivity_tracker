@@ -43,6 +43,13 @@ def upgrade() -> None:
         schema="pt",
     )
 
+    op.execute(
+        """
+        INSERT INTO pt.statistics_parsing_config (user_id)
+        SELECT id FROM pt.user;
+        """
+    )
+
 
 def downgrade() -> None:
     op.drop_table("statistics_parsing_config", schema="pt")
