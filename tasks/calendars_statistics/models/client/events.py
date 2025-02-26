@@ -35,7 +35,7 @@ class MeetingResponseStatus(StrEnum):
 
 
 class Attendee(BaseModel):
-    self: bool
+    self: bool = False
     status: MeetingResponseStatus = Field(alias="responseStatus")
 
 
