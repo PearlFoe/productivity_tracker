@@ -1,11 +1,13 @@
 import datetime
+from collections.abc import Iterable
 from zoneinfo import ZoneInfo, available_timezones
 
 from tenacity import RetryError
 
 from ..models.calendars import Calendar
-from ..models.client.events import Event
+from ..models.client.events import Event, MeetingResponseStatus
 from ..models.flows_params import StatisticsFilters
+from ..models.parsing_config import StatisticsParsingConfig
 from .calendars import CalendarService
 from .clients import GoogleCalendarAPIClient
 
@@ -15,7 +17,12 @@ class StatisticsService:
         self._calendar = calendar_service
         self._client = api_client
 
-    def count_total_minutes(self, events: list[Event], start: datetime, end: datetime) -> int:
+    def count_total_minutes(
+        self,
+        events: list[Event],
+        start: datetime.datetime,
+        end: datetime.datetime,
+    ) -> int:
         minutes = 0
 
         for event in events:
@@ -31,6 +38,39 @@ class StatisticsService:
 
         return minutes
 
+    @staticmethod
+    def _is_all_day_event(event: Event) -> bool:
+        start = event.start.datetime or event.start.date
+        end = event.end.datetime or event.end.date
+        return (end - start).days >= 1
+
+    @staticmethod
+    def _is_rejected_meeting(event: Event) -> bool:
+        if not event.attendees:
+            return False
+
+        for attendee in event.attendees:
+            if not attendee.self:
+                continue
+
+            return attendee.status == MeetingResponseStatus.DECLINE
+
+        return False
+
+    def filter_events(self, events: Iterable[Event], config: StatisticsParsingConfig) -> list[Event]:
+        filtered_events = []
+
+        for event in events:
+            if config.skip_all_day_events and self._is_all_day_event(event):
+                continue
+
+            if config.skip_rejected_meetings and self._is_rejected_meeting(event):
+                continue
+
+            filtered_events.append(event)
+
+        return filtered_events
+
     async def parse_statistics(self, filters: StatisticsFilters) -> None:
         try:
             events = await self._client.events(
@@ -41,9 +81,12 @@ class StatisticsService:
         except RetryError:
             events = []
 
+        parsing_config = await self._calendar.get_statistics_parsing_config(filters.user_id)
+        filtered_events = self.filter_events(events, parsing_config)
+
         await self._calendar.save_calendar_statistics(
             calendar_id=filters.calendar_id,
-            minutes=self.count_total_minutes(events, filters.start, filters.end),
+            minutes=self.count_total_minutes(filtered_events, filters.start, filters.end),
             date=filters.start.date(),
         )
 

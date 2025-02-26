@@ -17,6 +17,7 @@ class CalendarQueryBuilder:
     async def save_statistics(
         self,
         connection: Connection,
+        *,
         calendar_id: UUID,
         minutes: int,
         date: date,
@@ -29,10 +30,26 @@ class CalendarQueryBuilder:
         )
 
     async def get_calendars_to_parse(
-        self, connection: Connection, timezones: Iterable[str], filter_date: date
+        self,
+        connection: Connection,
+        *,
+        timezones: Iterable[str],
+        filter_date: date,
     ) -> list[dict]:
         return await self._queries.get_calendars_to_parse(
             connection,
             timezones=timezones,
             filter_date=filter_date,
         )
+
+    async def get_statistics_parsing_config(
+        self,
+        connection: Connection,
+        *,
+        user_id: UUID,
+    ) -> dict:
+        data = await self._queries.get_statistics_parsing_config(
+            connection,
+            user_id=user_id,
+        )
+        return dict(data)

@@ -1,4 +1,5 @@
 import datetime as dt
+from enum import StrEnum
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -26,8 +27,21 @@ class DateTimeField(BaseModel):
         return dt.datetime.strptime(dt_, GOOGLE_API_DATE_RESPONSE_FORMAT).date()  # noqa: DTZ007
 
 
+class MeetingResponseStatus(StrEnum):
+    NEEDS_ACTION = "needsAction"
+    DECLINE = "declined"
+    TENTATIVE = "tentative"
+    ACCEPTED = "accepted"
+
+
+class Attendee(BaseModel):
+    self: bool
+    status: MeetingResponseStatus = Field(alias="responseStatus")
+
+
 class Event(BaseModel):
     id: str
     summary: str | None = None
+    attendees: list[Attendee] | None = None
     start: DateTimeField
     end: DateTimeField

@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 
 class StatisticsFilters(BaseModel):
+    user_id: UUID
     calendar_id: UUID
     calendar_google_id: str
     start: datetime

@@ -9,12 +9,14 @@ from tenacity import RetryError
 from tasks.calendars_statistics.models.calendars import Calendar
 from tasks.calendars_statistics.models.client.events import Event
 from tasks.calendars_statistics.models.flows_params import StatisticsFilters
+from tasks.calendars_statistics.models.parsing_config import StatisticsParsingConfig
 from tasks.calendars_statistics.services.statistics import StatisticsService
 
 from .data.events import (
     SINGE_HOUR_EVENT,
     SINGE_HOUR_EVENT__ENDS_NEXT_DAY,
     SINGLE_ALL_DAY_EVENT,
+    SINGLE_HOUR_EVENT_WITH_REJECTED_MEETING,
     TWO_ALL_DAY_EVENTS,
     TWO_ALL_DAY_EVENTS__SAME_DAY,
     TWO_HOUR_EVENTS,
@@ -148,6 +150,7 @@ class TestStatisticsService:
         self,
         filters: StatisticsFilters,
         statistics_service: StatisticsService,
+        parsing_config: StatisticsParsingConfig,
     ):
         async def failed_retry_events(*args, **kwargs) -> list:
             future = asyncio.Future()
@@ -155,9 +158,42 @@ class TestStatisticsService:
             raise RetryError(future)
 
         statistics_service._client.events = failed_retry_events
+        statistics_service._calendar._calendar._db["parsing_config"][parsing_config.user_id] = parsing_config
 
         await statistics_service.parse_statistics(filters)
         statistics = statistics_service._calendar._calendar._db["statistics"]
 
         assert filters.calendar_id in statistics
         assert statistics[filters.calendar_id]["minutes"] == 0
+
+    @pytest.mark.parametrize(
+        ("params", "events_in", "events_out"),
+        [
+            (
+                {"skip_all_day_events": True, "skip_rejected_meetings": False},
+                SINGLE_HOUR_EVENT_WITH_REJECTED_MEETING + SINGLE_ALL_DAY_EVENT,
+                SINGLE_HOUR_EVENT_WITH_REJECTED_MEETING,
+            ),
+            (
+                {"skip_all_day_events": False, "skip_rejected_meetings": True},
+                SINGLE_HOUR_EVENT_WITH_REJECTED_MEETING + SINGLE_ALL_DAY_EVENT,
+                SINGLE_ALL_DAY_EVENT,
+            ),
+            (
+                {"skip_all_day_events": True, "skip_rejected_meetings": True},
+                SINGLE_HOUR_EVENT_WITH_REJECTED_MEETING + SINGLE_ALL_DAY_EVENT,
+                [],
+            ),
+        ],
+    )
+    async def test_events_filtering(
+        self,
+        params: dict[str, bool],
+        events_in: tuple[Event],
+        events_out: tuple[Event],
+        statistics_service: StatisticsService,
+        parsing_config: StatisticsParsingConfig,
+    ):
+        parsing_config = parsing_config.model_copy(update=params)
+        filtered_events = statistics_service.filter_events(events_in, parsing_config)
+        assert filtered_events == events_out

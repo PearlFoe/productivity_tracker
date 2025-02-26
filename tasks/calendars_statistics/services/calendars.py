@@ -4,6 +4,7 @@ from uuid import UUID
 
 from ..db.repositories import CalendarRepository
 from ..models.calendars import Calendar
+from ..models.parsing_config import StatisticsParsingConfig
 
 
 class CalendarService:
@@ -18,3 +19,6 @@ class CalendarService:
 
     async def get_calendars_to_parse(self, timezones: Iterable[str], filter_date: date) -> list[Calendar]:
         return await self._calendar.get_calendars_to_parse(timezones=timezones, filter_date=filter_date)
+
+    async def get_statistics_parsing_config(self, user_id: UUID) -> StatisticsParsingConfig:
+        return await self._calendar.get_statistics_parsing_config(user_id)

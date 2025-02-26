@@ -15,6 +15,7 @@ WITH calendars_with_daily_statistics AS (
 )
 SELECT
     c.id,
+    c.user_id,
     c.name,
     c.description,
     c.google_id,
@@ -27,3 +28,13 @@ WHERE
     c.timezone = ANY(:timezones) AND
     c.disabled IS NULL AND
     cds.calendar_id IS NULL;
+
+
+-- name: get_statistics_parsing_config^
+SELECT
+    user_id,
+    skip_all_day_events,
+    skip_rejected_meetings
+FROM pt.statistics_parsing_config
+WHERE 
+    user_id = :user_id;

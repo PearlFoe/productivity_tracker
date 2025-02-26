@@ -8,6 +8,7 @@ from tasks.calendars_statistics.containers import CalendarsStatisticsContainer
 from tasks.calendars_statistics.models.calendars import Calendar
 from tasks.calendars_statistics.models.client.events import Event
 from tasks.calendars_statistics.models.flows_params import StatisticsFilters
+from tasks.calendars_statistics.models.parsing_config import StatisticsParsingConfig
 from tasks.calendars_statistics.services.statistics import StatisticsService
 from tasks.settings import Settings
 
@@ -41,6 +42,7 @@ def google_id() -> str:
 def calendar(google_id: str) -> Calendar:
     return Calendar(
         id=uuid4(),
+        user_id=uuid4(),
         google_id=google_id,
         name="test_calendar_name",
         timezone="Etc/UTC",
@@ -68,8 +70,18 @@ def calendar_events() -> list[Event]:
 @pytest.fixture
 def filters(calendar: Calendar):
     return StatisticsFilters(
+        user_id=calendar.user_id,
         calendar_id=calendar.id,
         calendar_google_id=calendar.google_id,
         start=datetime.datetime.now(tz=datetime.UTC) - datetime.timedelta(days=1),
         end=datetime.datetime.now(tz=datetime.UTC),
+    )
+
+
+@pytest.fixture
+def parsing_config(calendar: Calendar):
+    return StatisticsParsingConfig(
+        user_id=calendar.user_id,
+        skip_all_day_events=True,
+        skip_rejected_meetings=True,
     )

@@ -1,6 +1,11 @@
 from uuid import uuid4
 
-from tasks.calendars_statistics.models.client.events import DateTimeField, Event
+from tasks.calendars_statistics.models.client.events import (
+    Attendee,
+    DateTimeField,
+    Event,
+    MeetingResponseStatus,
+)
 
 SINGE_HOUR_EVENT = [
     Event(
@@ -86,5 +91,20 @@ SINGE_HOUR_EVENT__ENDS_NEXT_DAY = [
         summary="test summary",
         start=DateTimeField(dateTime="2025-01-01T23:30:00+00:00", timeZone="Etc/UTC"),
         end=DateTimeField(dateTime="2025-01-02T00:30:00+00:00", timeZone="Etc/UTC"),
+    ),
+]
+
+SINGLE_HOUR_EVENT_WITH_REJECTED_MEETING = [
+    Event(
+        id=str(uuid4()),
+        summary="test summary",
+        start=DateTimeField(dateTime="2025-01-01T00:00:00+00:00", timeZone="Etc/UTC"),
+        end=DateTimeField(dateTime="2025-01-01T01:00:00+00:00", timeZone="Etc/UTC"),
+        attendees=[
+            Attendee(
+                self=True,
+                responseStatus=MeetingResponseStatus.DECLINE,
+            )
+        ],
     ),
 ]
