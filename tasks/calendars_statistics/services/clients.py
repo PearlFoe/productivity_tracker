@@ -3,8 +3,8 @@ from datetime import datetime
 
 from aiogoogle import Aiogoogle, excs
 from aiogoogle.auth.creds import ServiceAccountCreds
-from prefect import get_run_logger
-from tenacity import retry, stop_after_attempt, wait_exponential_jitter
+from prefect.logging import get_run_logger
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential_jitter
 
 from ..constants import GOOGLE_API_DATETIME_FORMAT
 from ..models.client.events import Event
@@ -49,6 +49,7 @@ class GoogleCalendarAPIClient:
             initial=1,
             max=60,
         ),
+        retry=retry_if_exception_type(excs.HTTPError),
     )
     async def events(self, calendar_id: str, start: datetime, end: datetime) -> list[Event]:
         logger = get_run_logger()

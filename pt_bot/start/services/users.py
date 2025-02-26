@@ -15,4 +15,5 @@ class UserService:
 
     async def create_new_user(self, user: User) -> None:
         with contextlib.suppress(UserAlreadyExistsError):
-            await self._user.create_user(user.id)
+            user_id = await self._user.create_user(user.id)
+            await self._user.create_statistics_parsing_config(user_id)

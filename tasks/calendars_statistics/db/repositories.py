@@ -5,6 +5,7 @@ from uuid import UUID
 import asyncpg
 
 from ..models.calendars import Calendar
+from ..models.parsing_config import StatisticsParsingConfig
 from .queries.builders import CalendarQueryBuilder
 
 
@@ -30,3 +31,8 @@ class CalendarRepository:
                 filter_date=filter_date,
             )
             return [Calendar.model_validate(dict(calendar)) for calendar in calendars]
+
+    async def get_statistics_parsing_config(self, user_id: UUID) -> StatisticsParsingConfig:
+        async with self._pool.acquire() as connection:
+            config_data = await self._queries.get_statistics_parsing_config(connection, user_id=user_id)
+            return StatisticsParsingConfig.model_validate(config_data)
