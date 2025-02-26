@@ -23,8 +23,8 @@ def upgrade() -> None:
         "statistics_parsing_config",
         sa.Column("id", sa.UUID(), server_default=sa.text("gen_random_uuid()"), nullable=False),
         sa.Column("user_id", sa.UUID(), nullable=False),
-        sa.Column("skip_all_day_events", sa.Boolean(), nullable=False, default=True),
-        sa.Column("skip_rejected_meetings", sa.Boolean(), nullable=False, default=True),
+        sa.Column("skip_all_day_events", sa.Boolean(), nullable=False, server_default="true"),
+        sa.Column("skip_rejected_meetings", sa.Boolean(), nullable=False, server_default="true"),
         sa.Column(
             "created_dt",
             sa.DateTime(timezone=True),
