@@ -1,0 +1,39 @@
+name: Deployment
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment: 
+      name: env
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Prepare SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
+        echo -e "Host *\n\tStrictHostKeyChecking no\n\tUser ${{ secrets.SSH_USER }}\n\n" > ~/.ssh/config
+    
+    - name: Copy .env file
+      run: |
+        cat <<'EOF' > secrets/.env.prod
+          ${{ secrets.ENV_FILE_CONTENT }}
+        EOF
+        scp -i ~/.ssh/deploy_key secrets/.env.prod ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/productivity_tracker/secrets/.env.prod
+    
+    - name: Deploy to server
+      run: |
+        ssh -i ~/.ssh/deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          cd ~/productivity_tracker
+          git pull origin main
+          docker compose up --build --detach
+        EOF
