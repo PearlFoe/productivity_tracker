@@ -33,7 +33,7 @@ jobs:
         python -m uv sync --frozen
     - name: Setup .env file
       run: |
-        printf '%s\n' "${{ vars.ENV_FILE_CONTENT }}" > secrets/.env.prod
+        printf '%s\n' "${{ secrets.ENV_FILE_CONTENT }}" > secrets/.env.prod
     - name: Unit tests
       run: |
         python -m uv run pytest tests/pt_bot/unit/ tests/tasks/unit/
