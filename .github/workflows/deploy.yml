@@ -1,4 +1,4 @@
-name: Deployment
+name: Run tests and deploy
 
 on:
   push:
@@ -8,7 +8,14 @@ permissions:
   contents: read
 
 jobs:
+  test:
+    uses: ./.github/workflows/tests.yml
+    with:
+      environment: env
+    secrets:
+      ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT }}
   deploy:
+    needs: test
     runs-on: ubuntu-latest
 
     environment: 
