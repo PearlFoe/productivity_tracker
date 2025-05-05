@@ -1,11 +1,7 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Tests
+name: Run tests
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -13,27 +9,9 @@ permissions:
   contents: read
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    environment: 
-      name: env
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.11"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip setuptools wheel
-        python -m pip install uv
-        python -m uv sync --frozen
-    - name: Setup .env file
-      run: |
-        printf '%s\n' "${{ secrets.ENV_FILE_CONTENT }}" > secrets/.env.prod
-    - name: Unit tests
-      run: |
-        python -m uv run pytest tests/pt_bot/unit/ tests/tasks/unit/
+  test:
+    uses: ./.github/workflows/tests.yml
+    with:
+      environment: env
+    secrets:
+      ENV_FILE_CONTENT: ${{ secrets.ENV_FILE_CONTENT }}
